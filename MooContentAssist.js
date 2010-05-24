@@ -18,7 +18,7 @@
  * 0.0 	| 13 May 2010: hello word
  */
 var coass = {
-	version : "MooContentAssist v0.66",
+	version : "MooContentAssist v0.68",
 	Implements: [Events, Options],
 	options: {
 		animationDuration: 225,
