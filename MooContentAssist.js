@@ -17,7 +17,7 @@
  * 0.15	| 15 May 2010: added completed text, events and keys
  * 0.0 	| 13 May 2010: hello word
  */
-var coass = {
+var MooContentAssist = new Class({
 	version : "MooContentAssist v0.68",
 	Implements: [Events, Options],
 	options: {
@@ -452,5 +452,4 @@ var coass = {
 		var test = a.test("^"+b,"i"); 
 		return test; 
 	}
-};
-var MooContentAssist = new Class(coass);
+});
