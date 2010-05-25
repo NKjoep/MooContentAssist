@@ -68,7 +68,7 @@ If the key has sub-keys you must use objects:
 	  "subkey3": ["word","word","word"]
 	}
 
-Obviously you have infinite levels :)
+Obviously you could have infinite levels :)
 
 Please see index.html in the git repo if you need a working example. :)
 
