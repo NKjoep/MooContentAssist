@@ -2,7 +2,10 @@ MooContentAssist
 ===========
 
 MooContentAssist is a javascript library that add a content assist feature to textareas in your webpage.
+
 This library is based on MooTools.
+
+MooContentAssist works with: Firefox, Chrome, IE7, IE8. Untested with Safari.
 
 How to use
 ----------
@@ -36,10 +39,35 @@ Then include the MooContentAssist.js, and add this script for a new istance:
     });
    });
 
-This section in under construction.
 
+You everything works if you give the right json words object.
+Use this as root: 
 
-Please see index.html in the git repo. :)
+    #JS
+    words: {
+       "key1": 
+       "key2": 
+       "key3":
+    
+    }
+
+If the key doesn't have sub-keys you must use an array with strings:
+
+	#JS
+	"key_without_subkeys": ["word1","word2","word3"]
+
+If the key has sub-keys you must use objects:
+
+	#JS
+	"key_with_subkeys": {
+	  "subkey1": ["word","word","word"],
+	  "subkey2": ["word","word","word"],
+	  "subkey3": ["word","word","word"]
+	}
+
+Obviously you have infinite levels :)
+
+Please see index.html in the git repo if you need a working example. :)
 
 Screenshots
 -----------
