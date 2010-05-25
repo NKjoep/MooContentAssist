@@ -40,7 +40,7 @@ Then include the MooContentAssist.js, and add this script for a new istance:
     });
 
 
-You everything works if you give the right json words object.
+Eeverything works if you give the right json words object.
 Use this as root: 
 
     #JS
