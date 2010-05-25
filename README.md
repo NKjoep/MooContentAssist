@@ -7,6 +7,13 @@ This library is based on MooTools.
 
 MooContentAssist works with: Firefox, Chrome, IE7, IE8. Untested with Safari.
 
+Features
+----------
+ * Configurable vocabulary object/namespace
+ * Configurable animation type/duration
+ * Configurable with obj-style or css classes
+ * Full working with FireFox, Chrome/Chromium, Safari, IE7/8 
+
 How to use
 ----------
 
