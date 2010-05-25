@@ -1,6 +1,6 @@
 /*
-MooContentAssist
 ---
+
 description: A content assist for textares of your webpage.
 
 license: GNU General Public License, version 2.
@@ -13,9 +13,11 @@ requires:
 - MooTools More 1.2.4.4 Element.Forms 
 
 provides: [MooContentAssist]
-...
 
- * Changelog:
+...
+*/
+
+/* MooContentAssist Changelog:
  * 0.68	| 24 May 2010: fixed textarea scroll when inserting keywords, fixed assistWindow position
  * 0.66	| 23 May 2010: firs dot fixed, occurence text highlight fixed, animation now is a parameter
  * 0.64	| 22 May 2010: ie7 fixes
