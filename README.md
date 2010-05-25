@@ -10,7 +10,10 @@ MooContentAssist works with: Firefox, Chrome, IE7, IE8. Untested with Safari.
 How to use
 ----------
 
-You need a textarea with the html id <textarea id="myeditor"></textarea>
+You need a textarea with the html id, example:
+    
+    #HTML
+    <textarea id="myeditor"></textarea>
 
 Then include the MooContentAssist.js, and add this script for a new istance:
    
