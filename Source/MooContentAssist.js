@@ -9,8 +9,10 @@ authors:
 - Andrea Dessì
 
 requires:
-- MooTools Core 1.2.4
-- MooTools More 1.2.4.4 Element.Forms 
+ core/1.2.4:
+  - .*
+ more/1.2.2.4:  
+  - Element.Forms 
 
 provides: [MooContentAssist]
 
