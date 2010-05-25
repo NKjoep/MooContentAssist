@@ -1,11 +1,20 @@
 /*
- * MooContentAssist Class
- * ------------------------------------
- * Author: Andrea Dessì nkjoep@gmail.com
- * Date: 24 May 2010
- * Version: 0.68
- * License: GNU General Public License, version 2.
- * 
+MooContentAssist
+---
+description: A content assist for textares of your webpage.
+
+license: GNU General Public License, version 2.
+
+authors:
+- Andrea Dessì
+
+requires:
+- MooTools Core 1.2.4
+- MooTools More 1.2.4.4 Element.Forms 
+
+provides: [MooContentAssist]
+...
+
  * Changelog:
  * 0.68	| 24 May 2010: fixed textarea scroll when inserting keywords, fixed assistWindow position
  * 0.66	| 23 May 2010: firs dot fixed, occurence text highlight fixed, animation now is a parameter
@@ -16,7 +25,8 @@
  * 0.25	| 16 May 2010: fixed words data structure
  * 0.15	| 15 May 2010: added completed text, events and keys
  * 0.0 	| 13 May 2010: hello word
- */
+*/
+
 var MooContentAssist = new Class({
 	version : "MooContentAssist v0.68",
 	Implements: [Events, Options],

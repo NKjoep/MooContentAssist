@@ -7,7 +7,8 @@ This library is based on MooTools.
 How to use
 ----------
 
-//todo
+This section in under construction.
+Please see index.html in the git repo. :)
 
 Screenshots
 -----------
