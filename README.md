@@ -19,7 +19,7 @@ Then include the MooContentAssist.js, and add this script for a new istance:
    
     #JS
     window.addEvent("domready",function(){
-        new MooContentAssist("editor",{
+        new MooContentAssist("myeditor",{
             words: {
                 "$content": {
                     "Immagine": ["getImagePath(\"\")","text"],
