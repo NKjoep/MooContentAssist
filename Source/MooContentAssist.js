@@ -10,7 +10,7 @@ authors:
 
 requires:
  core/1.2.4:
-  - .*
+  - all
  more/1.2.2.4:  
   - Element.Forms 
 
