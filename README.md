@@ -5,7 +5,7 @@ MooContentAssist is a javascript library that add a content assist feature to te
 
 This library is based on MooTools.
 
-MooContentAssist works with: Firefox, Chrome, IE7, IE8. Untested with Safari.
+MooContentAssist works with: FireFox, Chrome/Chromium, Safari, IE7/8.
 
 Features
 ----------
