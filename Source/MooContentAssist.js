@@ -19,20 +19,99 @@ provides: [MooContentAssist]
 ...
 */
 
-/* MooContentAssist Changelog:
- * 0.68	| 24 May 2010: fixed textarea scroll when inserting keywords, fixed assistWindow position
- * 0.66	| 23 May 2010: firs dot fixed, occurence text highlight fixed, animation now is a parameter
- * 0.64	| 22 May 2010: ie7 fixes
- * 0.63	| 21 May 2010: added events "click" and "over" to the shown items, when showing assistWindow first item is already selected, added "." trigger
- * 0.60	| 21 May 2010: added styles for items, window positioning 
- * 0.55	| 20 May 2010: fixed textarea events
- * 0.25	| 16 May 2010: fixed words data structure
- * 0.15	| 15 May 2010: added completed text, events and keys
- * 0.0 	| 13 May 2010: hello word
+/*
+    Title: MooContentAssist Doc Reference
 */
 
+/*
+    Class: MooContentAssist
+    
+    It adds a content/code assist functionality to your textareas.
+
+    Changelog:
+    
+        24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
+        23 May 2010 v0.66 - first dot fixed, occurence text highlight fixed, animation now is a parameter
+        22 May 2010 v0.64 - ie7 fixes
+        21 May 2010 v0.63 - added events "click" and "over" to the shown items, when showing assistWindow first item is already selected, added "." trigger
+        21 May 2010 v0.60 - added styles for items, window positioning 
+        20 May 2010 v0.55 - fixed textarea events
+        16 May 2010 v0.25 - fixed words data structure
+        15 May 2010 v0.15 - added completed text, events and keys
+        13 May 2010 v0.0  - hello word	
+    
+    Info:
+	
+		Version - 0.68
+		Date - 24 May 2010
+		
+	Parameters:
+	
+	    el - {String} The html id of the textarea
+	    options - {Object} An Object containing all the setting
+    
+    The Options Object:
+        The option object has this properties:
+
+        animationDuration - {Number}{Default 225}. It defines how long will be the show/hide animation
+        css - {Object} Contains all the css properties objects for the content assist window elements
+        css.assistWindow - {String|Object} The css class/properties for the container of everything
+        css.assistList - {String|Object} The css class/properties for the container of the items
+        css.completedItem - {String|Object} The css class/properties for the container of single item in the list
+        css.activeItem - {String|Object} The css class/properties for highlighted/active item from the list 
+        css.occurence - {String|Object} The css class/properties for the matched text in the keyword
+        css.completedText - {String|Object} The css class/properties for the completed/help text in the keyword
+        words - {Object} The vocabulary.
+    
+    
+    The Words Vocabulary Object:
+        Everything works if you give the right json words object. Use this as root:
+        
+        (start code)
+words: {
+    "key1":
+    "key2":
+    "key3":
+}        
+        (end)
+        
+        Then put in the *words* object your keys. 
+        If the key doesn't have subkey, so it has just children keywords, use the array form:
+        
+        (start code)
+"key_without_subkeys": ["word1","word2","word3" ...]
+        (end)
+        
+        If the key has subkeys, use the object form:
+        (start code)
+"key_with_subkeys":  {
+    "subkey1": ["word","word","word" ...],
+    "subkey2": ["word","word","word" ...],
+    ...
+}
+        (end)
+        
+        The exaple with mixed keys (with and without subkeys)
+        (start code)
+words: {
+    "key1": ["a","b","c"],
+    "key2": [null],
+    "key3": {
+       "subkey1": {
+           "subsub1": ["tr","ol","ololo"],
+           "subsub2": ["ulla","lala","laaaa"],
+           "subsub3": [null]
+       },
+       "subkey2": ["test1","test2","test3"],
+       "subkey3": ["weeeeeeeeee!"]
+    }
+}     
+        (end)
+        
+        
+*/
 var MooContentAssist = new Class({
-	version : "MooContentAssist v0.68",
+	v: "MooContentAssist v0.68",
 	Implements: [Events, Options],
 	options: {
 		animationDuration: 225,
@@ -72,7 +151,8 @@ var MooContentAssist = new Class({
 				"opacity": "0.97"
 			}
 		},		
-		toggler: "toggler",
+		//toggler option is not in use. still TODO
+        toggler: "toggler",
 		words: { }
 	},
 	initialize: function(el, options){
@@ -320,24 +400,21 @@ var MooContentAssist = new Class({
 		if($chk(namespace)) {
 			var foundList = [];
 			var vocabulary = this.vocabulary;
-			var cleanVoc = this.vocabulary.getClean();
 			if (namespace.length > 1) {
 				var arrayNotation="";
 				for (var i = 0; i < namespace.length-1; i++) {
 					if (!(i == namespace.length-1 && namespace[i] == "/" )) {
 						arrayNotation = arrayNotation + "['" + namespace[i] + "']";
-						//if (i < namespace.length-2) { }
 					}
 				} 
 				try {
-					vocabulary = eval("cleanVoc"+arrayNotation);
+					vocabulary = eval("vocabulary.getClean()"+arrayNotation);
 					if($type(vocabulary) == "object") {
 						vocabulary = new Hash(vocabulary).getKeys();
 					}
 				} catch (e) { }
 			} else {
-				vocabulary = vocabulary.getClean();
-				vocabulary = new Hash(vocabulary).getKeys();
+				vocabulary = vocabulary.getKeys();
 			}
 			if($defined(vocabulary) && $chk(vocabulary) && $type(vocabulary) == "array" && vocabulary.length > 0 ) {
 				var lastWord = this.namespace.getLast();
@@ -452,17 +529,7 @@ var MooContentAssist = new Class({
 		}
 	},
 	checkString: function(a,b) {
-		var b = b.replace(/\./gi, "\\\\.");
-		b = b.replace(/\[/gi, "\\\[");
-		b = b.replace(/\]/gi, "\\\]");
-		b = b.replace(/\{/gi, "\\\{");
-		b = b.replace(/\}/gi, "\\\}");
-		b = b.replace(/\(/gi, "\\\(");
-		b = b.replace(/\)/gi, "\\\)");
-		b = b.replace(/\^/gi, "\\\^");
-		b = b.replace(/\|/gi, "\\\|");
-		b = b.replace(/\*/gi, "\\\*");
-		b = b.replace(/\$/gi, "\\\$");
+		var b = b.replace(/\./gi, "\\\\.").replace(/\[/gi, "\\\[").replace(/\]/gi, "\\\]").replace(/\{/gi, "\\\{").replace(/\}/gi, "\\\}").replace(/\(/gi, "\\\(").replace(/\)/gi, "\\\)").replace(/\^/gi, "\\\^").replace(/\|/gi, "\\\|").replace(/\*/gi, "\\\*").replace(/\$/gi, "\\\$");
 		var test = a.test("^"+b,"i"); 
 		return test; 
 	}
