@@ -43,8 +43,8 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - 0.68
-		Date - 24 May 2010
+		Version - 0.68.2
+		Date - 04 Jun 2010
 		
 	Parameters:
 	
@@ -112,7 +112,7 @@ words: {
         
 */
 var MooContentAssist = new Class({
-	v: "MooContentAssist v0.68",
+	version: "MooContentAssist v0.68.2",
 	Implements: [Events, Options],
 	options: {
 		animationDuration: 225,
