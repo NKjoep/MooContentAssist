@@ -2,6 +2,6 @@ name: MooContentAssist
 author: NKjoep
 category: Forms
 tags: [editor, content, assist, completer]
-#docs: http://url.to.docs
+docs: http://moocontentassist.altervista.org/docs/
 demo: http://moocontentassist.altervista.org/
-current: 0.68
+current: 0.68.2
