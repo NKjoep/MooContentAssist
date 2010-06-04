@@ -122,12 +122,12 @@ var MooContentAssist = new Class({
 				"cursor": "pointer",
 				"color":"red",
 				"background-color": "#51607C",
-				"padding": "0 0 0 0"
+				"padding": "0"
 			},
 			"completedItem": {
 				"margin-bottom": "3px",
 				"cursor": "pointer",
-				"padding": "0 0 0 0"
+				"padding": "0"
 			},
 			"assistList": {
 				"margin": "0",
@@ -269,22 +269,8 @@ var MooContentAssist = new Class({
 	},
 	selectItem: function(item) {
 		if ($defined(this.selectedItem) && $defined(item) && $chk(item.get("text")) ) {
-			if ($defined(this.options.css.activeItem)) {
-				if ($type(this.options.css.activeItem) == "object") {
-					this.selectedItem.set("style","");
-				}
-				if ($type(this.options.css.activeItem) == "string") {
-					this.selectedItem.removeClass(this.options.css.activeItem);			
-				}
-			}
-			if ($defined(this.options.css.completedItem)) {
-				if ($type(this.options.css.completedItem) == "object") {
-					this.selectedItem.setStyles(this.options.css.completedItem);
-				}
-				if ($type(this.options.css.completedItem) == "string") {
-					this.selectedItem.addClass(this.options.css.completedItem);			
-				}
-			}
+			this.removeCss(this.selectedItem,this.options.css.activeItem);
+			this.applyCss(this.selectedItem,this.options.css.completedItem);
 		}
 		if ($defined(item) && $chk(item.get("text"))) {
 			var start;
@@ -292,22 +278,8 @@ var MooContentAssist = new Class({
 			else { start = this.namespace.getLast().length};			
 			this.selectedItem = item;
 			this.completedText = item.get("text").substring(start); 			
-			if ($defined(this.options.css.completedItem)) {
-				if ($type(this.options.css.completedItem) == "object") {
-					item.set("style","");
-				}
-				else if ( $type(this.options.css.completedItem) == "string" ) {
-					item.removeClass(this.options.css.completedItem);			
-				} 
-			}
-			if ($defined(this.options.css.activeItem)) {
-				if ($type(this.options.css.activeItem) == "object"){
-					item.setStyles(this.options.css.activeItem);
-				}
-				else if ($type(this.options.css.activeItem) == "string") {
-					item.addClass(this.options.css.activeItem);			
-				}
-			}
+			this.removeCss(item,this.options.css.completedItem);
+			this.applyCss(item,this.options.css.activeItem);
 		}
 	},
 	useSelectedItem: function() {
@@ -448,19 +420,13 @@ var MooContentAssist = new Class({
 					"opacity": "0"
 				}
 			}).inject(this.editorTextarea,"after");
-			w.setPosition({
-				x: this.editorTextarea.getCoordinates().left,
-				y: this.editorTextarea.getCoordinates().top+this.editorTextarea.getScrollTop()+this.editorTextarea.getSize().y
-			});
-			w.setStyles({
-				"left":this.editorTextarea.getCoordinates().left,
-				"top": this.editorTextarea.getCoordinates().top+this.editorTextarea.getScrollTop()+this.editorTextarea.getSize().y
-			});
+			w.position({
+				relativeTo: this.editorTextarea,
+				position: 'bottomLeft',
+				edge: 'upperLeft'			
+			});			
 			this.assistWindow = w;
-			if ($defined(this.options.css.assistWindow)) {
-				if ($type(this.options.css.assistWindow=="object")) w.setStyles(this.options.css.assistWindow);				
-				else if ($type(this.options.css.assistWindow)=="string") {w.addClass(this.options.css.assistWindow);}
-			}
+			this.applyCss(w,this.options.css.assistWindow);
 		} else { 
 			w = this.assistWindow; 
 			w.empty();
@@ -469,10 +435,7 @@ var MooContentAssist = new Class({
 		this.fireEvent("show");
 		if (foundList.length > 0) {
 			this.assistList = new Element("ul").inject(this.assistWindow);
-			if ($defined(this.options.css.assistList)) {
-				if ($type(this.options.css.assistList)=="object") this.assistList.setStyles(this.options.css.assistList);
-				else if ($type(this.options.css.assistList)=="string") this.assistList.addClass(this.options.css.assistList);
-			}
+			this.applyCss(this.assistList,this.options.css.assistList);
 		}
 		var versionEl = new Element("span",{ 
 			text: this.version, 
@@ -496,17 +459,26 @@ var MooContentAssist = new Class({
 		}.bind(this));
 		this.editorTextarea.scrollTop = scrollTop;
 	},
+	applyCss: function(el,css) {
+		if ($defined(css)) {
+			if ($type(css)=="object") el.setStyles(css);
+			else if ($type(css)=="string") el.addClass(css);
+		}		
+	},
+	removeCss: function(el,css) {
+		if ($defined(css)) {
+			if ($type(css)=="string") el.removeClass(css);
+			else el.set("style","");
+		}		
+	},
+	
 	makeAssistItem: function(item) {
 		if ($type(item) == "object") item = new Hash(item).getKeys()[0];
 		var occurencePosition = this.namespace.getLast()=="/" ? 0 : this.namespace.getLast().length;  
 		var occurrence = item.substring(0,occurencePosition);
 		var completedText = item.substring(occurencePosition,item.length);
-		
 		var itemEl = new Element("li").inject(this.assistList);
-		if ($defined(this.options.css.occurence)) {
-			if ($type(this.options.css.completedItem)=="object") itemEl.setStyles(this.options.css.completedItem);
-			else if ($type(this.options.css.completedItem)=="string") itemEl.addClass(this.options.css.completedItem);
-		}		
+		this.applyCss(itemEl,this.options.css.completedItem);
 		itemEl.addEvents({
 			"click": function(ev){ 
 				ev.stopPropagation();
@@ -518,15 +490,10 @@ var MooContentAssist = new Class({
 			}.bind([this,itemEl])
 		});
 		var occurrenceEl = new Element("span",{ "text": occurrence }).inject(itemEl,"top");
-		if ($defined(this.options.css.occurence)) {
-			if ($type(this.options.css.occurence)=="object") occurrenceEl.setStyles(this.options.css.occurence);
-			else if ($type(this.options.css.occurence)=="string") occurrenceEl.addClass(this.options.css.occurence);
-		}
+		this.applyCss(occurrenceEl,this.options.css.occurence);
+
 		var completedEl = new Element("span",{ "text": completedText}).inject(itemEl,"bottom");
-		if ($defined(this.options.css.completedText)) {
-			if ($type(this.options.css.completedText)=="object") completedEl.setStyles(this.options.css.completedText);
-			else if ($type(this.options.css.completedText)=="string") completedEl.addClass(this.options.css.completedText);
-		}
+		this.applyCss(completedEl,this.options.css.completedText);
 	},
 	checkString: function(a,b) {
 		var b = b.replace(/\./gi, "\\\\.").replace(/\[/gi, "\\\[").replace(/\]/gi, "\\\]").replace(/\{/gi, "\\\{").replace(/\}/gi, "\\\}").replace(/\(/gi, "\\\(").replace(/\)/gi, "\\\)").replace(/\^/gi, "\\\^").replace(/\|/gi, "\\\|").replace(/\*/gi, "\\\*").replace(/\$/gi, "\\\$");
