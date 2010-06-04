@@ -171,9 +171,22 @@ var MooContentAssist = new Class({
 		}
 	},
 	initializeVocabulary: function(){
+		/*
+		 * Function: initializeVocabulary
+		 * 
+		 * Gets the words object and build a new Hash()
+		 * 
+		 */
+		
 		this.vocabulary = new Hash(this.options.words);		
 	},
 	initializeEvents: function() {
+		/*
+		 * Function: initializeEvents
+		 * 
+		 * It setups the event for the MooContentAssist instance, adding the events: startAssist, hide, show, destroy. 
+		 * 
+		 */
 		this.addEvents({
 			"startAssist": function(position){ this.startAssist(position); }.bind(this),	
 			"hide": function() { this.hide(); }.bind(this),
@@ -182,6 +195,13 @@ var MooContentAssist = new Class({
 		});
 	},
 	initializeTextarea: function(el){
+		/*
+		 * Function: initializeTextarea
+		 * 
+		 * Get the element and store it, adds the events and the logic for firing the "startAssist" event.
+		 * 
+		 */
+		
 		this.editorTextarea = document.id(el); 
 		this.editorTextarea.addEvents({
 			"keydown": function(ev) {
@@ -251,6 +271,12 @@ var MooContentAssist = new Class({
 		});
 	},
 	selectItemUp: function() {
+		/*
+		 * Function: selectItemUp
+		 * 
+		 * Highlight the previous item from the list. Usually used when the user press the up arrow key.
+		 * 
+		 */
 		if ($defined(this.selectedItem) && $defined(this.selectedItem.getPrevious())) {
 			this.selectItem(this.selectedItem.getPrevious());
 		} 
@@ -260,6 +286,12 @@ var MooContentAssist = new Class({
 		}
 	},
 	selectItemDown: function() {
+		/*
+		 * Function: selectItemDown
+		 * 
+		 * Highlight the next item from the list. Usually used when the user press the down arrow key.
+		 * 
+		 */
 		if ($defined(this.selectedItem) && $defined(this.selectedItem.getNext())) {
 			this.selectItem(this.selectedItem.getNext());
 		} 
@@ -269,6 +301,15 @@ var MooContentAssist = new Class({
 		}
 	},
 	selectItem: function(item) {
+		/*
+		 * Function: selectItem
+		 * 
+		 * Gets an item and highlights it. Always called from selectItemUp and selectItemDown functions.
+		 * 
+		 * Parameters:
+		 * item -  the item to highlight
+		 *  
+		 */
 		if ($defined(this.selectedItem) && $defined(item) && $chk(item.get("text")) ) {
 			this.removeCss(this.selectedItem,this.options.css.activeItem);
 			this.applyCss(this.selectedItem,this.options.css.completedItem);
@@ -284,6 +325,12 @@ var MooContentAssist = new Class({
 		}
 	},
 	useSelectedItem: function() {
+		/*
+		 * Function: useSelectedItem
+		 * 
+		 * Gets the text from the current highlighted item and writes it to the textarea.
+		 *
+		 */
 		if($defined(this.completedText)) {
 			var scrollTop = this.editorTextarea.scrollTop;
 			var position = this.editorTextarea.getCaretPosition();
@@ -298,6 +345,12 @@ var MooContentAssist = new Class({
 		this.fireEvent("destroy");		
 	},
 	destroy: function() { 
+		/*
+		 * Function: destroy
+		 * 
+		 * This will destroy the assistedWindow and the items list calling the hide function
+		 * 
+		 */
 		if ($defined(this.assistWindow)) { 
 			this.hide();
 			//this.assistWindow.destroy(); 
@@ -305,6 +358,12 @@ var MooContentAssist = new Class({
 		this.assistWindow = null;
 	},
 	hide: function() {
+		/*
+		 * Function: hide
+		 * 
+		 * Will hide the window with the item
+		 * 
+		 */
 		var fx = new Fx.Morph(this.assistWindow, {
 			duration: this.options.animationDuration, 
 			onChainComplete: function() {
@@ -318,6 +377,12 @@ var MooContentAssist = new Class({
 		});
 	},
 	show: function() {
+		/*
+		 * Function: show
+		 * 
+		 * Will show the window with the items.
+		 * 
+		 */
 		var fx = new Fx.Morph(this.assistWindow, {
 			duration: this.options.animationDuration, 
 			transition: this.options.aniationTransition
@@ -328,6 +393,15 @@ var MooContentAssist = new Class({
 		});
 	},
 	startAssist: function(position) {
+		/*
+		 * Function: startAssist
+		 * 
+		 * Will check for the current "namespace" and lets start rock.
+		 * 
+		 * Parameters:
+		 * position - {Number} The textarea position where start to read
+		 * 
+		 */
 		if (!$defined(position)) position = this.editorTextarea.getCaretPosition();
 		this.position = position;
 		this.destroy();			
@@ -337,6 +411,18 @@ var MooContentAssist = new Class({
 		} 
 	},
 	findNameSpaceElements: function(position) {
+		/*
+		 * Function: findNameSpaceElements
+		 * 
+		 * Will discovere where the namespace or the object tree.
+		 * 
+		 * Parameters:
+		 * position - {Number} The textarea position where start to read
+		 * 
+		 * Returns: 
+		 * {Array} the namespace
+		 * 
+		 */
 		var namespace = null;
 		var endPosition = position;
 		position=position-1;
@@ -369,6 +455,13 @@ var MooContentAssist = new Class({
 		return namespace;	
 	},
 	doAssist: function() {
+		/*
+		 * Function: doAssist
+		 * 
+		 * It will read the already discovered namespace and will get the right items from the vocabulary. 
+		 * When something useful is found will call the makeAssistWindow function.
+		 * 
+		 */
 		var namespace = this.namespace;
 		if($chk(namespace)) {
 			var foundList = [];
@@ -410,6 +503,15 @@ var MooContentAssist = new Class({
 		}		
 	},
 	makeAssistWindow: function(foundList) {
+		/*
+		 * Function: makeAssistWindow
+		 * 
+		 * Will build the element containing the help.
+		 * 
+		 * Parameters:
+		 * foundList - {Array} The vocabulary found for the current namespace
+		 * 
+		 */
 		var scrollTop = this.editorTextarea.scrollTop;
 		foundList.sort();
 		var w;
@@ -461,19 +563,46 @@ var MooContentAssist = new Class({
 		this.editorTextarea.scrollTop = scrollTop;
 	},
 	applyCss: function(el,css) {
+		/*
+		 * Function: applyCss
+		 * 
+		 * Check and apply the css passed. Css parameter could be a "Style Object" or a String. If passed a string a css class with that name will be added to the element. 
+		 * 
+		 * Parameters:
+		 * el - {Element} the element to apply the css properties 
+		 * css - {Object|string} the css properties
+		 */
 		if ($defined(css)) {
 			if ($type(css)=="object") el.setStyles(css);
 			else if ($type(css)=="string") el.addClass(css);
 		}		
 	},
 	removeCss: function(el,css) {
+		/*
+		 * Function: removeCss
+		 * 
+		 * Removes the css properties passed. If css is a string that class will be removed otherwise the style will be resetted.
+		 * 
+		 * Parameters:
+		 * el - {Element} the element to remove the css properties 
+		 * css - {Object|string} the css properties
+		 * 
+		 */
 		if ($defined(css)) {
 			if ($type(css)=="string") el.removeClass(css);
 			else el.set("style","");
 		}		
 	},
-	
 	makeAssistItem: function(item) {
+		/*
+		 * Function: makeAssistItem
+		 * 
+		 * Will build the an item to add to the list.
+		 * 
+		 * Parameters:
+		 * item - {Object|String} the text of the item in the assistedWindow list  
+		 * 
+		 */
 		if ($type(item) == "object") item = new Hash(item).getKeys()[0];
 		var occurencePosition = this.namespace.getLast()=="/" ? 0 : this.namespace.getLast().length;  
 		var occurrence = item.substring(0,occurencePosition);
@@ -492,11 +621,22 @@ var MooContentAssist = new Class({
 		});
 		var occurrenceEl = new Element("span",{ "text": occurrence }).inject(itemEl,"top");
 		this.applyCss(occurrenceEl,this.options.css.occurence);
-
 		var completedEl = new Element("span",{ "text": completedText}).inject(itemEl,"bottom");
 		this.applyCss(completedEl,this.options.css.completedText);
 	},
 	checkString: function(a,b) {
+		/*
+		 * Function: checkString
+		 * 
+		 * checkString returns true when the "a" string starts with the "b" string.
+		 * 
+		 * Parameters:
+		 * a - {String} the string to test
+		 * b - {String} the pattern to match
+		 * 
+		 * Returns:
+		 * true|false
+		 */
 		var b = b.replace(/\./gi, "\\\\.").replace(/\[/gi, "\\\[").replace(/\]/gi, "\\\]").replace(/\{/gi, "\\\{").replace(/\}/gi, "\\\}").replace(/\(/gi, "\\\(").replace(/\)/gi, "\\\)").replace(/\^/gi, "\\\^").replace(/\|/gi, "\\\|").replace(/\*/gi, "\\\*").replace(/\$/gi, "\\\$");
 		var test = a.test("^"+b,"i"); 
 		return test; 
