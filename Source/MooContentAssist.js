@@ -30,7 +30,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
-        10 Jun 2010 v0.68 - scrollable result box
+        10 Jun 2010 v0.68 - scrollable result box, scrollable result box shows always the current item in the middle
         04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
         24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
         23 May 2010 v0.66 - first dot fixed, occurence text highlight fixed, animation now is a parameter
