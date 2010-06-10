@@ -319,7 +319,7 @@ var MooContentAssist = new Class({
 	},
     scrollToItem: function(item) {
             var assistWindowScroller = new Fx.Scroll(this.assistWindow,{
-                    duration: 0,
+                    duration: 125,
                     offset: {"x": 0, "y": this.assistWindow.getStyle('padding-top').toInt()*-1}
                     
                 });
@@ -330,9 +330,13 @@ var MooContentAssist = new Class({
             //current item
             var c = this.assistWindow.getElements('li').indexOf(item);
             //index
-            var v1 = (c/f).toInt(); v1 = v1 * f; 
-            //scroll to item at that index
-            assistWindowScroller.toElement(this.assistWindow.getElements('li')[v1]);
+            var indexToScrollTo = ((c/f).toInt()) * f; 
+			//calculate the current "frame"
+			if (c > (f/2).toInt()) {
+				indexToScrollTo = c - (f/2).toInt(); 
+			}
+			//scroll to item at that index
+            assistWindowScroller.toElement(this.assistWindow.getElements('li')[indexToScrollTo]);
     },
 	selectItem: function(item) {
 		/*
@@ -568,6 +572,9 @@ var MooContentAssist = new Class({
 			w = this.assistWindow; 
 			w.empty();
 		}
+		
+		//TODO: add blur event for destroying the assistWindow
+		
 		this.selectedItem = null;
 		this.fireEvent("show");
 		if (foundList.length > 0) {
