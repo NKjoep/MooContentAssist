@@ -30,6 +30,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
+        10 Jun 2010 v0.68 - scrollable result box
         04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
         24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
         23 May 2010 v0.66 - first dot fixed, occurence text highlight fixed, animation now is a parameter
@@ -119,16 +120,24 @@ var MooContentAssist = new Class({
 		aniationTransition:  Fx.Transitions.Sine.easeOut,
 		css: {
 			"activeItem": {
-				"margin-bottom": "3px",
+				"margin-bottom": "0.125em",
 				"cursor": "pointer",
 				"color":"red",
 				"background-color": "#51607C",
-				"padding": "0"
+				"padding": "0.125em 0 0 0",
+                "height": "1.5em",
+                "display": "block",
+                "float": "left",
+                "width": "100%"
 			},
 			"completedItem": {
-				"margin-bottom": "3px",
+				"margin-bottom": "0.125em",
 				"cursor": "pointer",
-				"padding": "0"
+				"padding": "0.125em 0 0 0",
+                "height": "1.5em",
+                "display": "block",
+                "float": "left",
+                "width": "100%"                
 			},
 			"assistList": {
 				"margin": "0",
@@ -146,10 +155,12 @@ var MooContentAssist = new Class({
 			"assistWindow": {
 				"border": "1px solid black",
 				"background-color": "#414E67",
-				"padding": "3px 0 3px 0",
+				"padding": "6px 0 3px 0",
 				"font-family": "arial,helvetica,clean,sans-serif",
 				"font-size": "13px",
-				"opacity": "0.97"
+				"opacity": "0.97",
+                "height": "8.75em",
+                "overflow": "auto"
 			}
 		},		
 		//toggler option is not in use. still TODO
@@ -277,13 +288,16 @@ var MooContentAssist = new Class({
 		 * Highlight the previous item from the list. Usually used when the user press the up arrow key.
 		 * 
 		 */
-		if ($defined(this.selectedItem) && $defined(this.selectedItem.getPrevious())) {
-			this.selectItem(this.selectedItem.getPrevious());
+		var item;
+        if ($defined(this.selectedItem) && $defined(this.selectedItem.getPrevious())) {
+            item = this.selectedItem.getPrevious();
 		} 
 		else { 
 			//TODO : refactor, make configurable "ul" and "li"
-			this.selectItem(this.assistWindow.getLast("ul").getLast("li")); 
+            item = this.assistWindow.getLast("ul").getLast("li");
 		}
+        this.selectItem(item);
+        this.scrollToItem(item);
 	},
 	selectItemDown: function() {
 		/*
@@ -292,14 +306,43 @@ var MooContentAssist = new Class({
 		 * Highlight the next item from the list. Usually used when the user press the down arrow key.
 		 * 
 		 */
-		if ($defined(this.selectedItem) && $defined(this.selectedItem.getNext())) {
-			this.selectItem(this.selectedItem.getNext());
+		var item;
+        if ($defined(this.selectedItem) && $defined(this.selectedItem.getNext())) {
+            item = this.selectedItem.getNext();
 		} 
 		else { 
 			//TODO : refactor, make configurable "ul" and "li"
-			this.selectItem(this.assistWindow.getFirst("ul").getFirst("li")); 
+            item = this.assistWindow.getFirst("ul").getFirst("li");
 		}
+        this.selectItem(item);
+        this.scrollToItem(item);
 	},
+    scrollToItem: function(item) {
+            var assistWindowScroller = new Fx.Scroll(this.assistWindow,{
+                    duration: 0,
+                    offset: {"x": 0, "y": this.assistWindow.getStyle('padding-top').toInt()*-1}
+                    
+                });
+            //assistWindowScroller.toElement(item);
+            //console.log("assistWindow->",assistWindow);
+            //console.log("dimensione finestra",(this.assistWindow.getSize().y/item.getSize().y).toInt());
+            //console.log("corrente",this.assistWindow.getElements('li').indexOf(item));
+            
+            //dimensione singolo item
+            var i = item.getComputedSize({"styles": ["margin","padding","border"]}).totalHeight;
+            //dimensione finestra
+            var f = (this.assistWindow.getComputedSize({"styles": ["padding"]}).totalHeight/i);
+            f = f.toInt();
+            //corrente
+            var c = this.assistWindow.getElements('li').indexOf(item);
+            //indice 
+            var v1 = (c/f).toInt();
+            v1 = v1 * f; 
+            //scroll to
+            assistWindowScroller.toElement(this.assistWindow.getElements('li')[v1]);
+           
+            //assistWindowScroller.toElement(item.getNext());
+    },
 	selectItem: function(item) {
 		/*
 		 * Function: selectItem
