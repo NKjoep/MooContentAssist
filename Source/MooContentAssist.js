@@ -323,25 +323,16 @@ var MooContentAssist = new Class({
                     offset: {"x": 0, "y": this.assistWindow.getStyle('padding-top').toInt()*-1}
                     
                 });
-            //assistWindowScroller.toElement(item);
-            //console.log("assistWindow->",assistWindow);
-            //console.log("dimensione finestra",(this.assistWindow.getSize().y/item.getSize().y).toInt());
-            //console.log("corrente",this.assistWindow.getElements('li').indexOf(item));
-            
-            //dimensione singolo item
+            //item height
             var i = item.getComputedSize({"styles": ["margin","padding","border"]}).totalHeight;
-            //dimensione finestra
-            var f = (this.assistWindow.getComputedSize({"styles": ["padding"]}).totalHeight/i);
-            f = f.toInt();
-            //corrente
+            //box height
+            var f = (this.assistWindow.getComputedSize({"styles": ["padding"]}).totalHeight/i); f = f.toInt();
+            //current item
             var c = this.assistWindow.getElements('li').indexOf(item);
-            //indice 
-            var v1 = (c/f).toInt();
-            v1 = v1 * f; 
-            //scroll to
+            //index
+            var v1 = (c/f).toInt(); v1 = v1 * f; 
+            //scroll to item at that index
             assistWindowScroller.toElement(this.assistWindow.getElements('li')[v1]);
-           
-            //assistWindowScroller.toElement(item.getNext());
     },
 	selectItem: function(item) {
 		/*
