@@ -30,6 +30,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
+        11 Jun 2010 v0.70 - configurable number of item shown in the box
         10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
         04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
         24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
@@ -118,6 +119,7 @@ var MooContentAssist = new Class({
 	options: {
 		animationDuration: 225,
 		aniationTransition:  Fx.Transitions.Sine.easeOut,
+        frameSize: 4,
 		css: {
 			"activeItem": {
 				"margin-bottom": "0.125em",
@@ -602,6 +604,9 @@ var MooContentAssist = new Class({
 			this.makeAssistItem(item);
 		}.bind(this));
 		this.editorTextarea.scrollTop = scrollTop;
+
+        this.assistWindow.setStyle("height",(this.assistWindow.getElements("li")[0].getComputedSize({"styles": ["padding","margin","border"]}).totalHeight * this.options.frameSize) + "px");
+        
 	},
 	applyCss: function(el,css) {
 		/*
