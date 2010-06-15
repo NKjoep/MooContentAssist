@@ -10,8 +10,9 @@
 			/************ client script ************/
 			window.addEvent("domready",function(){
 				new MooContentAssist("editor",{
-					words: {
-						"$content": {
+					frameSize: "4",
+                    words: {
+                        "$content": {
 							"Immagine": ["getImagePath(\"\")","text"],
 							"CorpoTesto":  ["text","textBeforeImage(0)","textAfterImage(0)","textByRange(0,0)"],
 							"Abstract":  ["text"],
@@ -44,7 +45,7 @@
 				});
 			});
 		</script>
-		
+		<link type="text/css" rel="stylesheet" href="themes.css" />
 		<style type="text/css">
 			body {
 				font-family: serif;
@@ -62,7 +63,6 @@
 			textarea {
 				width: 590px;				
 			}
-			
 </style>		
 	</head>
 	<body>
@@ -80,9 +80,9 @@
 					<li>Use <strong>up/down</strong> arrow to choose, <strong>enter/click</strong> to confirm.</li>
 					<li>Press <strong>ESC</strong> to close the window with the suggested words.</li>
 					<li>Add <strong>dot</strong> to navigate inside objects.</li>
-				</ol>				
-				<p>
-					<textarea cols="72" rows="6" id="editor">Some text here.1 
+				</ol>
+                <p>
+                    <textarea cols="72" rows="6" id="editor">Some text here.1 
 
 Some text here.2
 
@@ -99,7 +99,7 @@ Some text here.7
 Some text here.8
 
 Some text here.9
-</textarea>
+					</textarea>
 				</p>
 			</fieldset>
 		</form>

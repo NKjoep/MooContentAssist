@@ -117,9 +117,9 @@ var MooContentAssist = new Class({
 	version: "MooContentAssist v0.70",
 	Implements: [Events, Options],
 	options: {
-		animationDuration: 225,
+		animationDuration: 150,
 		aniationTransition:  Fx.Transitions.Sine.easeOut,
-        frameSize: 4,
+        frameSize: 3,
 		css: {
 			"activeItem": {
 				"margin-bottom": "0.125em",
@@ -321,7 +321,7 @@ var MooContentAssist = new Class({
 	},
     scrollToItem: function(item) {
             var assistWindowScroller = new Fx.Scroll(this.assistWindow,{
-                    duration: 125,
+                    duration: this.options.animationDuration,
                     offset: {"x": 0, "y": this.assistWindow.getStyle('padding-top').toInt()*-1}
                     
                 });
@@ -339,7 +339,7 @@ var MooContentAssist = new Class({
 			}
 			//scroll to item at that index
             assistWindowScroller.toElement(this.assistWindow.getElements('li')[indexToScrollTo]);
-    },
+	},
 	selectItem: function(item) {
 		/*
 		 * Function: selectItem
@@ -382,7 +382,7 @@ var MooContentAssist = new Class({
 			this.editorTextarea.scrollTop = scrollTop;
 			this.completedText=null;
 		}
-		this.fireEvent("destroy");		
+		this.fireEvent("destroy");
 	},
 	destroy: function() { 
 		/*
@@ -448,7 +448,10 @@ var MooContentAssist = new Class({
 		this.namespace = this.findNameSpaceElements(position);
 		if ($chk(this.namespace)) {
 			this.doAssist();
-		} 
+		}
+        else {
+            this.fireEvent("destroy");
+        }
 	},
 	findNameSpaceElements: function(position) {
 		/*
@@ -540,6 +543,9 @@ var MooContentAssist = new Class({
 				this.makeAssistWindow(foundList);
 				this.selectItemDown();
 			}
+            else {
+                this.fireEvent("destroy");
+            }
 		}		
 	},
 	makeAssistWindow: function(foundList) {
@@ -604,10 +610,40 @@ var MooContentAssist = new Class({
 			this.makeAssistItem(item);
 		}.bind(this));
 		this.editorTextarea.scrollTop = scrollTop;
-
-        this.assistWindow.setStyle("height",(this.assistWindow.getElements("li")[0].getComputedSize({"styles": ["padding","margin","border"]}).totalHeight * this.options.frameSize) + "px");
+		this.setFrameSize();
         
 	},
+	setFrameSize: function(size) {
+		if (!$defined(size)) {
+			size = this.options.frameSize;
+		}
+		var frameSize=3;
+		switch ($type(size)) {
+			case "string": 
+				if ($type(size.toInt()) == "number") {
+					frameSize = size.toInt();
+				}
+				else if ($type(document.id(size)) == "element") {
+					var f = document.id(size);
+					f = $try(function() { return this.get("value"); }.bind(f));
+					if ($chk(f)) {
+						frameSize = f;
+					}
+				}
+				break;
+			case "number":
+				frameSize = size;
+				break;
+			case "element":
+				if ($chk( $try( function() { return  size.get("value").toInt() } ) )) {
+					frameSize = size.get("value").toInt();
+				}
+				break;
+			default: 
+				frameSize = 3;
+		}
+		this.assistWindow.setStyle("height",(this.assistWindow.getElements("li")[0].getComputedSize({"styles": ["padding","margin","border"]}).totalHeight * frameSize) + "px");
+	}, 
 	applyCss: function(el,css) {
 		/*
 		 * Function: applyCss
