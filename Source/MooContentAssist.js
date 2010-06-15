@@ -46,7 +46,7 @@ provides: [MooContentAssist]
     Info:
 	
 		Version - 0.70
-		Date - 10 Jun 2010
+		Date - 11 Jun 2010
 		
 	Parameters:
 	
