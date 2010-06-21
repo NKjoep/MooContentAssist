@@ -56,7 +56,9 @@ provides: [MooContentAssist]
     The Options Object:
         The option object has this properties:
 
-        animationDuration - {Number}{Default 225}. It defines how long will be the show/hide animation
+        animationDuration - {Number}{Default 225} It defines how long will be the show/hide animation
+        aniationTransition - {Object}{Default Fx.Transitions.Sine.easeOut} A Fx.Transitions object used for animations in show/hide events
+        frameSize - {String|El|Number} Sets the height of window in order to contain X elements. Could be a html id, an element or a number
         css - {Object} Contains all the css properties objects for the content assist window elements
         css.assistWindow - {String|Object} The css class/properties for the container of everything
         css.assistList - {String|Object} The css class/properties for the container of the items
