@@ -9,6 +9,7 @@ MooContentAssist works with: FireFox, Chrome/Chromium, Safari, IE7/8.
 
 Features
 ----------
+ * Configurable results window size
  * Configurable vocabulary object/namespace
  * Configurable animation type/duration
  * Configurable with obj-style or css classes
