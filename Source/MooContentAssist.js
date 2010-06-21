@@ -616,6 +616,19 @@ var MooContentAssist = new Class({
         
 	},
 	setFrameSize: function(size) {
+		/*
+		 * Function: setFrameSize
+		 * 
+		 * Set the height of the assistWindow in order to contain and show a certain number of items.
+		 * 
+		 * Parameters:
+		 * size - {String|El|Number} If null this.options.frameSize will be used.
+		 * 
+		 * If size is String will be converted to a number, if possible, otherwise an element with that id will be searched in the dom.
+		 * 
+		 * If size is an Element its value will be retrieved with the standard function ( ex. size.get("value") )
+		 * 
+		 */        
 		if (!$defined(size)) {
 			size = this.options.frameSize;
 		}
