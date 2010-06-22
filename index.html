@@ -11,6 +11,14 @@
 			window.addEvent("domready",function(){
 				new MooContentAssist("editor",{
 					frameSize: "4",
+                    css: {
+            			"activeItem": "theme_japs_activeItem",
+            			"completedItem": "theme_japs_completedItem",
+            			"assistList": "theme_japs_assistList",
+            			"occurence": "theme_japs_occurence",
+            			"completedText": "theme_japs_completedText",
+            			"assistWindow": "theme_japs_assistWindow"
+                    },
                     words: {
                         "$content": {
 							"Immagine": ["getImagePath(\"\")","text"],
