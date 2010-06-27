@@ -542,17 +542,6 @@ var MooContentAssist = new Class({
 					foundList = vocabulary;				
 				}				
 			}
-            
-            var tmp="";
-            this.namespace.each(function(item,index){
-                if (index > 0) {
-                    tmp = tmp + " | ";
-                }
-                tmp = tmp+item;
-            }.bind(tmp));
-            
-            //console.log(tmp);
-            
 			if (foundList.length > 0) { 
 				this.makeAssistWindow(foundList);
 				this.selectItemDown();
