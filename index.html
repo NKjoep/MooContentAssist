@@ -9,7 +9,7 @@
 		<script type="text/javascript">
 			/************ client script ************/
 			window.addEvent("domready",function(){
-				new MooContentAssist("editor",{
+				var editorAssisted = new MooContentAssist("editor",{
 					frameSize: "4",
                     css: {
             			"activeItem": "theme_green_activeItem",
@@ -51,6 +51,65 @@
 						"contentAssist": ["help","editor","start"]
 					}
 				});
+
+			//theme togglers
+			document.id("theme_pink").addEvent("click", function(ev) {
+				ev.preventDefault();
+				this.setCss({
+					"activeItem": "theme_pink_activeItem",
+        			"completedItem": "theme_pink_completedItem",
+        			"assistList": "theme_pink_assistList",
+        			"occurence": "theme_pink_occurence",
+        			"completedText": "theme_pink_completedText",
+        			"assistWindow": "theme_pink_assistWindow"					
+				});	
+			}.bind(editorAssisted));
+			document.id("theme_silver").addEvent("click", function(ev) {
+				ev.preventDefault();
+				this.setCss({
+					"activeItem": "theme_silver_activeItem",
+        			"completedItem": "theme_silver_completedItem",
+        			"assistList": "theme_silver_assistList",
+        			"occurence": "theme_silver_occurence",
+        			"completedText": "theme_silver_completedText",
+        			"assistWindow": "theme_silver_assistWindow"					
+				});	
+			}.bind(editorAssisted));
+			document.id("theme_yellow").addEvent("click", function(ev) {
+				ev.preventDefault();
+				this.setCss({
+					"activeItem": "theme_yellow_activeItem",
+        			"completedItem": "theme_yellow_completedItem",
+        			"assistList": "theme_yellow_assistList",
+        			"occurence": "theme_yellow_occurence",
+        			"completedText": "theme_yellow_completedText",
+        			"assistWindow": "theme_yellow_assistWindow"	
+				});	
+			}.bind(editorAssisted));
+			document.id("theme_green").addEvent("click", function(ev) {
+				ev.preventDefault();
+				this.setCss({
+					"activeItem": "theme_green_activeItem",
+        			"completedItem": "theme_green_completedItem",
+        			"assistList": "theme_green_assistList",
+        			"occurence": "theme_green_occurence",
+        			"completedText": "theme_green_completedText",
+        			"assistWindow": "theme_green_assistWindow"
+				});	
+			}.bind(editorAssisted));
+			document.id("theme_jAPS").addEvent("click", function(ev) {
+				ev.preventDefault();
+				this.setCss({
+					"activeItem": "theme_japs_activeItem",
+        			"completedItem": "theme_japs_completedItem",
+        			"assistList": "theme_japs_assistList",
+        			"occurence": "theme_japs_occurence",
+        			"completedText": "theme_japs_completedText",
+        			"assistWindow": "theme_japs_assistWindow"
+				});	
+			}.bind(editorAssisted));
+
+
 			});
 		</script>
 		<link type="text/css" rel="stylesheet" href="themes.css" />
@@ -77,7 +136,7 @@
 		<h1><label for="editor">MooContentAssist v0.70</label></h1>
 		<p>This software is released under GNU General Public License, version 2.</p>			
 		<p>Author: <a href="mailto:nkjoep@gmail.com">Andrea Dessì</a>.</p>
-
+		<hr />
 		<h2 id="demo">Demo</h2>
 		<form action="#" method="get">
 			<fieldset>
@@ -109,8 +168,18 @@ Some text here.8
 Some text here.9
 					</textarea>
 				</p>
+				<h3>Theme togglers</h3>
+				<p>
+					<a id="theme_pink" href="#pink">pink</a> |
+					<a id="theme_silver" href="#silver">silver</a> |
+					<a id="theme_yellow" href="#yellow">yellow</a> |
+					<a id="theme_green" href="#green">green</a> |
+					<a id="theme_jAPS" href="#jAPS">jAPS</a> |
+					
+				</p>
 			</fieldset>
 		</form>
+		<hr />
 		<h2>Download</h2>
 		<p><a href="http://github.com/NKjoep/MooContentAssist/raw/master/Source/MooContentAssist.js">MooContentAssist Latest Version</a></p>
 		<h2>Learn More</h2> 

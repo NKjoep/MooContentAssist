@@ -30,6 +30,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
+        27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
         11 Jun 2010 v0.70 - configurable number of item shown in the box
         10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
         04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
@@ -45,8 +46,8 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - 0.70
-		Date - 11 Jun 2010
+		Version - 0.70.2
+		Date - 27 Jun 2010
 		
 	Parameters:
 	
@@ -116,7 +117,7 @@ words: {
         
 */
 var MooContentAssist = new Class({
-	version: "MooContentAssist v0.70",
+	version: "MooContentAssist v0.70.2",
 	Implements: [Events, Options],
 	options: {
 		animationDuration: 150,
@@ -497,7 +498,7 @@ var MooContentAssist = new Class({
 				namespace = ["/"];
 			}
 		}
-		return namespace;	
+		return namespace;
 	},
 	doAssist: function() {
 		/*
@@ -541,6 +542,17 @@ var MooContentAssist = new Class({
 					foundList = vocabulary;				
 				}				
 			}
+            
+            var tmp="";
+            this.namespace.each(function(item,index){
+                if (index > 0) {
+                    tmp = tmp + " | ";
+                }
+                tmp = tmp+item;
+            }.bind(tmp));
+            
+            //console.log(tmp);
+            
 			if (foundList.length > 0) { 
 				this.makeAssistWindow(foundList);
 				this.selectItemDown();
@@ -689,6 +701,18 @@ var MooContentAssist = new Class({
 			if ($type(css)=="string") el.removeClass(css);
 			else el.set("style","");
 		}		
+	},
+	setCss: function(css) {
+		/*
+		 * Function: setCss
+		 * 
+		 * Apply css properties to MooContentAssist instance.
+		 * 
+		 * Parameters:
+		 * css - {Object} the css properties or class to apply to MooContentAssist elements.
+		 * 
+		 */
+		if ($defined(css) && $chk(css)) { this.options.css = css; }
 	},
 	makeAssistItem: function(item) {
 		/*
