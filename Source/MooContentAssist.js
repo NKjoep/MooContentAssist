@@ -68,7 +68,7 @@ provides: [MooContentAssist,MooContentAssistWordXMLExtractor]
         css.activeItem - {String|Object} The css class/properties for highlighted/active item from the list 
         css.occurence - {String|Object} The css class/properties for the matched text in the keyword
         css.completedText - {String|Object} The css class/properties for the completed/help text in the keyword
-        words - {Object} The vocabulary.
+        words - {Object|String} The vocabulary. If a string is passed could be an xml or an URL to xml file.
     
     
     The Words Vocabulary Object:
@@ -115,6 +115,27 @@ words: {
 }     
         (end)
         
+        If you prefer the xml version use this sintax:
+        (start code)
+         <words>
+             <key><name>mykey</name></key>
+             <key><name>mykey2</name></key>
+
+             <key>
+                 <name>mykey_with_subkeys</name>
+                 
+                 <key><name>sub_k_1</name></key>
+                 <key><name>sub_k_2</name></key>
+                 <key>
+                     <name>sub_k_3</name>
+                     
+                     <key><name>subsub_k_1</name></key>    
+                     <key><name>subsub_k_2</name></key>    
+                 </key>
+             </key>
+             
+         </words>
+        (end)
         
 */
 var MooContentAssist = new Class({
