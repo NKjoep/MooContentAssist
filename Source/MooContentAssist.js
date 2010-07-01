@@ -48,7 +48,7 @@ provides: [MooContentAssist,MooContentAssistWordXMLExtractor]
     Info:
 	
 		Version - 0.70.4
-		Date - 27 Jun 2010
+		Date - 01 Jul 2010
 		
 	Parameters:
 	
