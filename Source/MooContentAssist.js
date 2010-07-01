@@ -30,7 +30,7 @@ provides: [MooContentAssist,MooContentAssistWordXMLExtractor]
 
     Changelog:
     
-        01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist
+        01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
         27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
         11 Jun 2010 v0.70 - configurable number of item shown in the box
         10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
@@ -602,12 +602,16 @@ var MooContentAssist = new Class({
 					"opacity": "0"
 				}
 			}).inject(this.editorTextarea,"after");
-			w.position({
-				relativeTo: this.editorTextarea,
-				position: 'bottomLeft',
-				edge: 'upperLeft'			
-			});			
-			this.assistWindow = w;
+            w.setPosition({
+				x: this.editorTextarea.getCoordinates().left,
+				y: this.editorTextarea.getCoordinates().top+this.editorTextarea.getScrollTop()+this.editorTextarea.getSize().y
+			});
+			w.setStyles({
+				"left":this.editorTextarea.getCoordinates().left,
+				"top": this.editorTextarea.getCoordinates().top+this.editorTextarea.getScrollTop()+this.editorTextarea.getSize().y
+			});
+            
+            this.assistWindow = w;
 			this.applyCss(w,this.options.css.assistWindow);
 		} else { 
 			w = this.assistWindow; 
