@@ -14,7 +14,7 @@ requires:
  more/1.2.2.4:  
   - Element.Forms 
 
-provides: [MooContentAssist]
+provides: [MooContentAssist,MooContentAssistWordXMLExtractor]
 
 ...
 */
@@ -30,6 +30,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
+        01 Jul 2010 v0.70.4 - converter from xml to words object
         27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
         11 Jun 2010 v0.70 - configurable number of item shown in the box
         10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
@@ -46,7 +47,7 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - 0.70.2
+		Version - 0.70.4
 		Date - 27 Jun 2010
 		
 	Parameters:
@@ -117,7 +118,7 @@ words: {
         
 */
 var MooContentAssist = new Class({
-	version: "MooContentAssist v0.70.2",
+	version: "MooContentAssist v0.70.4",
 	Implements: [Events, Options],
 	options: {
 		animationDuration: 150,
@@ -193,8 +194,13 @@ var MooContentAssist = new Class({
 		 * Gets the words object and build a new Hash()
 		 * 
 		 */
-		
-		this.vocabulary = new Hash(this.options.words);		
+		switch($type(this.options.words)) {
+            case "string":
+                this.vocabulary = new Hash(new MooContentAssistWordXMLExtractor(this.options.words));
+                break;
+        	default: 
+        		this.vocabulary = new Hash(this.options.words);
+        }
 	},
 	initializeEvents: function() {
 		/*
@@ -750,5 +756,61 @@ var MooContentAssist = new Class({
 		var b = b.replace(/\./gi, "\\\\.").replace(/\[/gi, "\\\[").replace(/\]/gi, "\\\]").replace(/\{/gi, "\\\{").replace(/\}/gi, "\\\}").replace(/\(/gi, "\\\(").replace(/\)/gi, "\\\)").replace(/\^/gi, "\\\^").replace(/\|/gi, "\\\|").replace(/\*/gi, "\\\*").replace(/\$/gi, "\\\$");
 		var test = a.test("^"+b,"i"); 
 		return test; 
+	}
+});
+/* XML WORD EXTRACTOR */
+var MooContentAssistWordXMLExtractor = new Class({
+	Implements: [Events, Options],
+	initialize: function(root, options){
+		if ($defined(root)) {
+            this.root = this.findRoot(root);
+			this.obj = {};
+			var children = this.root.getChildren("key");
+			for (var i = 0; i < children.length;i++) {
+				var item = children[i];
+				var key = this.extractName(item);
+				var value = this.extractObj(item);
+				this.obj[key] = value;
+			}
+			return this.obj;
+		}
+	},
+    findRoot: function(root) {
+        var discoveredRoot = null;
+        switch ($type(root)) {
+            case "string":   
+                if (root.contains("<")) { 
+                    discoveredRoot =  XML.hashesToTree(XML.rootToHashes(XML.rootFromString(root)));
+                } else {
+                    discoveredRoot =  XML.hashesToTree(XML.rootToHashes(XML.rootFromFile(root.toURI())));
+                }
+                if (discoveredRoot.length > 0) { 
+                	discoveredRoot = discoveredRoot[0];
+                }
+            break;
+            
+            default:
+	            discoveredRoot = null;
+        }
+        return discoveredRoot;
+    },
+	getObj: function() {
+		return this.obj;
+	},
+	extractName: function(itemTree) { 
+		return itemTree.getElement("name").get("text").trim().clean();
+	},
+	extractObj: function(itemTree) {
+		var obj = null;
+		var children = itemTree.getChildren("key");
+		if (children.length > 0) {
+			obj = {};
+			for (var i = 0; i < children.length; i++) {
+				var item = children[i];
+				var name = this.extractName(item);
+				obj[name] = this.extractObj(item);
+			}
+		} 
+		return obj;
 	}
 });
