@@ -25,7 +25,7 @@ Then include the MooContentAssist.js, and add this script for a new istance:
     #JS
     window.addEvent("domready",function(){
 		var editorAssisted = new MooContentAssist( {
-			"source": document.id("editor"),
+			"source": document.id("myeditor"),
 			"vocabulary" : {
 				"key0": null,
 				"key1": ["subkey1","subkey2","subkey3"],
