@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<title>MooContentAssist - xml demo page</title>
+		<meta content="application/xhtml+xml; charset=UTF-8" />
+		<script type="text/javascript" src="js/lib/mootools-1.2-core.js"></script>
+		<script type="text/javascript" src="js/lib/mootools-1.2-more.js"></script>
+		<script type="text/javascript" src="js/lib/mootools-xml.js"></script>
+		<script type="text/javascript" src="MooContentAssist.js"></script>
+		
+		<script type="text/javascript">
+			/************ client script ************/
+			window.addEvent("domready",function(){
+    			var editorAssisted = new MooContentAssist("editor",{
+    				frameSize: "4",
+                    words: "words.xml"
+    			});
+			});
+		</script>
+		<link type="text/css" rel="stylesheet" href="themes.css" />
+		<style type="text/css">
+			body {
+				font-family: serif;
+				padding: 0 10px;
+			}
+			form, fieldset, p, textarea { margin: 0; padding: 0; }
+			fieldset {
+				border: 0;
+			}
+			strong {
+				font-family: monospace;
+				font-style: italic;
+				color: #00588F;
+			}
+			textarea {
+				width: 590px;				
+			}
+</style>		
+	</head>
+	<body>
+		<h1><label for="editor">MooContentAssist xml demo</label></h1>
+		<p>This software is released under GNU General Public License, version 2.</p>			
+		<p>Author: <a href="mailto:nkjoep@gmail.com">Andrea Dessì</a>.</p>
+		<hr />
+		<h2 id="demo">Demo</h2>
+		<form action="#" method="get">
+			<fieldset>
+				<p>Instructions:</p>			
+				<ol>
+					<li>Use <strong>control+space</strong> or <strong>alt+space</strong> to get help.</li>
+					<li>Available vocabulary: <strong>a, b, c, $</strong>.</li>
+					<li>Use <strong>up/down</strong> arrow to choose, <strong>enter/click</strong> to confirm.</li>
+					<li>Press <strong>ESC</strong> to close the window with the suggested words.</li>
+					<li>Add <strong>dot</strong> to navigate inside objects.</li>
+				</ol>
+                <p>
+                    <textarea cols="72" rows="6" id="editor">Some text here.1 
+
+Some text here.2
+
+Some text here.3
+
+Some text here.4
+
+Some text here.5
+
+Some text here.6
+
+Some text here.7
+
+Some text here.8
+
+Some text here.9
+					</textarea>
+				</p>
+			</fieldset>
+		</form>
+    </body>
+</html>

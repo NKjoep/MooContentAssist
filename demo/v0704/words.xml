@@ -1,0 +1,161 @@
+<words>
+	<key><name>$content</name>
+		
+		<key><name>$Immagine</name>
+			<key><name>getImagePath("")</name></key>
+			<key><name>text</name></key>
+		</key>
+		
+		<key><name>CorpoTesto</name>
+		 	<key><name>text</name></key>
+		 	<key><name>textBeforeImage(0)</name></key>
+		 	<key><name>textAfterImage(0)</name></key>
+		 	<key><name>textByRange(0,0)</name></key>
+		</key>
+		
+		<key><name>Abstract</name>
+	 		<key><name>text</name></key>
+		</key>
+		
+		<key><name>Allegati</name>
+	 		<key><name>size()</name></key>
+		</key>
+		
+		<key><name>categories</name></key>
+		
+		<key><name>DataInizio</name>
+			<key><name>shortDate</name></key>
+		 	<key><name>fullDate</name></key>
+		 	<key><name>mediumDate</name></key>
+		 	<key><name>getFormattedDate("")</name></key>
+		</key>
+		
+		<key><name>DataFine</name>
+			<key><name>shortDate</name></key>
+		 	<key><name>fullDate</name></key>
+		 	<key><name>mediumDate</name></key>
+		 	<key><name>getFormattedDate("")</name></key>
+		</key>
+		
+		<key><name>SitoWeb</name>
+		 	<key><name>destination</name></key>
+		 	<key><name>text</name></key>
+		</key>
+	</key>
+	
+	<key><name>$18n</name>
+ 		<key><name>getLabel("")</name></key>
+ 	</key>
+	
+	<key><name>a</name>
+ 		<key><name>a1111</name></key>
+ 		<key><name>a2222</name></key>
+ 		<key><name>a3333</name></key>
+ 	</key>
+	
+	<key><name>albatros</name>
+ 		<key><name>quack</name></key>
+	</key>
+	
+	<key><name>albatro</name></key>
+	
+	<key><name>albeggiare</name>
+		<key><name>test1</name></key>
+		<key><name>test2</name></key>
+		<key><name>test3</name></key>
+	</key>
+	
+	<key><name>alberare</name>
+		<key><name>prop</name></key>
+		<key><name>prop2</name></key>
+		<key><name>prop3</name></key>
+		<key><name>prop4</name></key>
+		<key><name>prop5</name></key>
+	</key>
+	
+	<key><name>alberato</name>
+		<key><name>a</name></key>
+		<key><name>b</name></key>
+		<key><name>c</name></key>
+		<key><name>d</name></key>
+		<key><name>e</name></key>
+		<key><name>f</name></key>
+	</key>
+	
+	<key><name>alberatura</name>
+		<key><name>ok</name></key>
+	</key>
+	
+	<key><name>b</name>
+		<key><name>bbb111</name></key>
+		<key><name>bbbbb2222</name></key>
+		<key><name>word-b2</name></key>
+	</key>	
+	
+	<key><name>babbalotto</name>
+		<key><name>ouch</name></key>
+	</key>
+	
+	<key><name>babbeo</name>
+		<key><name>property</name></key>
+	</key>
+	
+	<key><name>babbino</name>
+		<key><name>getSomething()</name></key>
+		<key><name>getOther()</name></key>
+		<key><name>isTrue()</name></key>
+	</key>
+	
+	<key><name>babbo</name>
+		<key><name>true</name></key>
+	</key>
+	
+	<key><name>babbuccia</name></key>
+	<key><name>babbuino</name></key>
+	<key><name>c</name></key>
+	
+	<key><name>contentAssist</name>
+		<key><name>help</name></key>
+		<key><name>editor</name></key>
+		<key><name>start</name></key>
+	</key>
+	
+	<key><name>MooTools</name>
+	
+		<key><name>Core</name>
+			<key><name>$chk()</name></key>
+			<key><name>$clear</name></key>
+			<key><name>$defined</name></key>
+			<key><name>$arguments</name></key>
+			<key><name>$empty</name></key>
+			
+			<key><name>Class</name>
+				<key><name>implement()</name></key>
+			</key>
+			
+			<key><name>Native</name>
+				<key><name>Array</name>
+					<key><name>each()</name></key>
+					<key><name>every()</name></key>
+					<key><name>filter()</name></key>
+					<key><name>clean()</name></key>
+				</key>
+				
+				<key><name>String</name>
+					<key><name>test()</name></key>
+					<key><name>contains()</name></key>
+					<key><name>trim()</name></key>
+				</key>
+			</key>
+			
+			<key><name>Element</name>
+				<key><name>get()</name></key>
+				<key><name>set()</name></key>
+				<key><name>addClass()</name></key>
+				<key><name>removeClass()</name></key>
+			</key>
+		</key>
+		
+	</key>
+	
+</words>
