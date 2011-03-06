@@ -1,4 +1,56 @@
-var mca = {
+/*
+---
+
+description: A content assist for textares of your webpage.
+
+license: GNU General Public License, version 2.
+
+authors:
+- Andrea Dessì <nkjoep@gmail.com>
+
+requires:
+ core/1.3:
+  - all
+ more/1.3:  
+  - all (sorry I should investigate about which More classes are needed.) 
+
+provides: [MooContentAssist]
+
+...
+*/
+/*
+    Title: MooContentAssist Doc Reference
+*/
+
+/*
+    Class: MooContentAssist
+    
+    It adds a content/code assist functionality to your textareas.
+
+    Changelog:
+    
+    	06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
+        01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
+        27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
+        11 Jun 2010 v0.70 - configurable number of item shown in the box
+        10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
+        04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
+        24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
+        23 May 2010 v0.66 - first dot fixed, occurence text highlight fixed, animation now is a parameter
+        22 May 2010 v0.64 - ie7 fixes
+        21 May 2010 v0.63 - added events "click" and "over" to the shown items, when showing assistWindow first item is already selected, added "." trigger
+        21 May 2010 v0.60 - added styles for items, window positioning 
+        20 May 2010 v0.55 - fixed textarea events
+        16 May 2010 v0.25 - fixed words data structure
+        15 May 2010 v0.15 - added completed text, events and keys
+        13 May 2010 v0.0  - hello word	
+    
+    Info:
+	
+		Version - 0.80
+		Date - 06 Mar 2011
+*/
+var MooContentAssist = new Class({
 	version: "MooContentAssist v0.80",
 	Implements: [Events, Options],
 	options: {
@@ -613,5 +665,4 @@ var mca = {
 			}
 		}
 	}
-};
-var MooContentAssist = new Class(mca);
+});
