@@ -1,20 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-		<title>MooContentAssist - demo page</title>
-		<meta content="application/xhtml+xml; charset=UTF-8" />
-		<script type="text/javascript" src="js/lib/mootools-1.2-core.js"></script>
-		<script type="text/javascript" src="js/lib/mootools-1.2-more.js"></script>
+    <head>
+        <title>MooContentAssist</title>
+        <meta content="text/html; charset=UTF-8" />
+        <style type="text/css">
+			body {
+				font-family: serif;
+				padding: 0 10px;
+			}
+			form, fieldset, p, textarea { 
+				margin: 0 0 1em 0; padding: 0;
+			}
+			fieldset {
+				border: 0;
+			}
+			strong {
+				font-family: monospace;
+				font-style: italic;
+				color: #00588F;
+			}
+			textarea {
+				width: 590px;				
+			}
+		</style>
+        <link type="text/css" rel="stylesheet" href="Source/MooContentAssist.css" />
+        <script type="text/javascript" src="js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
+        <script type="text/javascript" src="js/lib/mootools-more-1.3.1.1.js"></script>
 		<script type="text/javascript" src="Source/MooContentAssist.js"></script>
-		
-		<script type="text/javascript">
-			/************ client script ************/
-			window.addEvent("domready",function(){
-				var editorAssisted = new MooContentAssist("editor",{
-					frameSize: "4",
-                    words: {
+        <script type="text/javascript">
+window.addEvent("domready", function() {
+	var editorAssisted = new MooContentAssist( {
+		frameSize : 3,
+		aggressiveAssist : true,
+		/*vocabularyUrl: "words.json",
+		vocabularyUrlParam : "ns",
+		vocabularyUrlMethod : "get",*/
+		onStart : function(mca) {
+			var ns = this.getNameSpace();
+			var found = this._discoverUserVocabulary(ns);
+			document.id("discovered").set("html", found.join(", "));
+		},
+		onSelectItem : function(item) {
+			//console.log("FIRED","onSelectItem",item);
+	},
+	onUseItem : function(item) {
+		//console.log("FIRED","onUseItem",item);
+	},
+	onShow : function(mca) {
+		//console.log("FIRED","onShow");
+	},
+	onHide : function(mca) {
+		//console.log("FIRED","onHide");
+	},
+	onEnd : function(mca) {
+		//console.log("FIRED","end");
+	},
+	source : document.id("editor"),
+	vocabulary : {
                         "$content": {
 							"Immagine": ["getImagePath(\"\")","text"],
 							"CorpoTesto":  ["text","textBeforeImage(0)","textAfterImage(0)","textByRange(0,0)"],
@@ -45,90 +87,42 @@
 						"c1212": [null],
 						"contentAssist": ["help","editor","start"]
 					}
-				});
+	});
 
-			//theme togglers
-			document.id("theme_pink").addEvent("click", function(ev) {
-				ev.preventDefault();
-				this.setCss({
-					"activeItem": "theme_pink_activeItem",
-        			"completedItem": "theme_pink_completedItem",
-        			"assistList": "theme_pink_assistList",
-        			"occurence": "theme_pink_occurence",
-        			"completedText": "theme_pink_completedText",
-        			"assistWindow": "theme_pink_assistWindow"					
-				});	
-			}.bind(editorAssisted));
-			document.id("theme_silver").addEvent("click", function(ev) {
-				ev.preventDefault();
-				this.setCss({
-					"activeItem": "theme_silver_activeItem",
-        			"completedItem": "theme_silver_completedItem",
-        			"assistList": "theme_silver_assistList",
-        			"occurence": "theme_silver_occurence",
-        			"completedText": "theme_silver_completedText",
-        			"assistWindow": "theme_silver_assistWindow"					
-				});	
-			}.bind(editorAssisted));
-			document.id("theme_yellow").addEvent("click", function(ev) {
-				ev.preventDefault();
-				this.setCss({
-					"activeItem": "theme_yellow_activeItem",
-        			"completedItem": "theme_yellow_completedItem",
-        			"assistList": "theme_yellow_assistList",
-        			"occurence": "theme_yellow_occurence",
-        			"completedText": "theme_yellow_completedText",
-        			"assistWindow": "theme_yellow_assistWindow"	
-				});	
-			}.bind(editorAssisted));
-			document.id("theme_green").addEvent("click", function(ev) {
-				ev.preventDefault();
-				this.setCss({
-					"activeItem": "theme_green_activeItem",
-        			"completedItem": "theme_green_completedItem",
-        			"assistList": "theme_green_assistList",
-        			"occurence": "theme_green_occurence",
-        			"completedText": "theme_green_completedText",
-        			"assistWindow": "theme_green_assistWindow"
-				});	
-			}.bind(editorAssisted));
-			document.id("theme_jAPS").addEvent("click", function(ev) {
-				ev.preventDefault();
-				this.setCss({
-					"activeItem": "theme_japs_activeItem",
-        			"completedItem": "theme_japs_completedItem",
-        			"assistList": "theme_japs_assistList",
-        			"occurence": "theme_japs_occurence",
-        			"completedText": "theme_japs_completedText",
-        			"assistWindow": "theme_japs_assistWindow"
-				});	
-			}.bind(editorAssisted));
+	document.id("aggressive").addEvent("change", function(ev) {
+		editorAssisted.setAggressiveAssist(ev.target.getProperty("checked"));
+	});
 
-
+	document.id("discoverWords").addEvent(
+			"change",
+			function(ev) {
+				editorAssisted.options.vocabularyDiscoverer = ev.target
+						.getProperty("checked");
 			});
-		</script>
-		<link type="text/css" rel="stylesheet" href="demo/themes.css" />
-		<style type="text/css">
-			body {
-				font-family: serif;
-				padding: 0 10px;
-			}
-			form, fieldset, p, textarea { margin: 0; padding: 0; }
-			fieldset {
-				border: 0;
-			}
-			strong {
-				font-family: monospace;
-				font-style: italic;
-				color: #00588F;
-			}
-			textarea {
-				width: 590px;				
-			}
-</style>		
+
+	document.id("frameSize").addEvent("change", function(ev) {
+		editorAssisted.options.frameSize = ev.target.get("value").toInt();
+	});
+
+	document.id("apply").addEvent("click", function(ev) {
+		var a = null;
+		try {
+			a = JSON.decode(document.id("static").get("value"));
+			//console.log("new vocabulary:",a);
+		} catch (e) {
+			console.log("error static sintax");
+			alert("sintax error, check it")
+		}
+		if (a != null) {
+			editorAssisted.options.vocabulary = a;
+		}
+	});
+	/* domready -end */
+});
+	</script>
 	</head>
-	<body>
-		<h1><label for="editor">MooContentAssist v0.70.4</label></h1>
+	<body> 
+		<h1><label for="editor">MooContentAssist v0.80</label></h1>
 		<p>This software is released under GNU General Public License, version 2.</p>			
 		<p>Author: <a href="mailto:nkjoep@gmail.com">Andrea Dessì</a>.</p>
 		<hr />
@@ -140,11 +134,11 @@
 					<li>Use <strong>control+space</strong> or <strong>alt+space</strong> to get help.</li>
 					<li>Available vocabulary: <strong>a, b, c, $</strong>.</li>
 					<li>Use <strong>up/down</strong> arrow to choose, <strong>enter/click</strong> to confirm.</li>
-					<li>Press <strong>ESC</strong> to close the window with the suggested words.</li>
+					<li>Press <strong>ESC/Tab</strong> to close the window with the suggested words.</li>
 					<li>Add <strong>dot</strong> to navigate inside objects.</li>
 				</ol>
-                <p>
-                    <textarea cols="72" rows="6" id="editor">Some text here.1 
+        	    <p>
+					<textarea cols="4" rows="4" id="editor">Some text here.1 
 
 Some text here.2
 
@@ -161,19 +155,51 @@ Some text here.7
 Some text here.8
 
 Some text here.9
-					</textarea>
-				</p>
-				<h3>Theme togglers</h3>
-				<p>
-					<a id="theme_pink" href="#pink">pink</a> |
-					<a id="theme_silver" href="#silver">silver</a> |
-					<a id="theme_yellow" href="#yellow">yellow</a> |
-					<a id="theme_green" href="#green">green</a> |
-					<a id="theme_jAPS" href="#jAPS">jAPS</a> |
-					
+        			</textarea>
+        		<br />
+					<input type="checkbox" id="aggressive" checked="checked" />
+					<label for="aggressive">Toggle Aggressive Help while writing in the textarea.</label>
+				<br/>
+					<input type="checkbox" id="discoverWords" checked="checked" />
+					<label for="discoverWords">Enable/Disable Local Keywords Discoverer</label>
+				<br/>
+					<select id="frameSize">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3" selected="selected">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+					</select>
+					<label for="frameSize"># items on list</label>
 				</p>
 			</fieldset>
 		</form>
+		<p>
+			Discovered Keywords (will appear when the MooContentAssist window popups):<br/>
+			<span id="discovered"></span>
+		</p>
+		<hr />
+		<p>
+			Insert a json object here as vocabulary:<input type="submit" value="apply" id="apply" />
+			<br />			
+			<textarea cols="4" rows="4" id="static">
+{
+"keyB": ["function", "Function", "fUnCt10n", "FUNCTion"],
+"keyA": {
+	"key2": null,
+	"key3": ["ok","ok2", "Ok"],
+	"key4": {
+		"a": null,
+		"b": null,
+		"c": [1,2,3]
+	}
+},
+"keySOMEThingMOreElse": null,
+"keyFagiano:E": [1,2,3,"a","b","c"] 
+}
+    		</textarea>
+		</p>
 		<hr />
 		<h2>Download</h2>
 		<p><a href="http://github.com/NKjoep/MooContentAssist/raw/master/Source/MooContentAssist.js">MooContentAssist Latest Version</a></p>
@@ -182,7 +208,6 @@ Some text here.9
 			<li><a href="http://moocontentassist.altervista.org/docs/">MooContentAssist Docs</a></li>
 			<li><a href="http://github.com/NKjoep/MooContentAssist">MooContentAssist@GitHub</a></li>
 			<li><a href="http://mootools.net/forge/p/moocontentassist">MooContentAssist@MooForge</a></li>
-			<li><a href="demo/xml-demo.html">MooContentAssist Demo with xml file</a></li>
-		</ul>
-    </body>
+		</ul>		
+	</body>
 </html>

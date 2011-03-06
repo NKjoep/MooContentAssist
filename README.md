@@ -11,13 +11,10 @@ Features
 ----------
  * Configurable results window size
  * Configurable vocabulary object/namespace
- * Configurable animation type/duration
- * Configurable with obj-style or css classes
- * Full working with FireFox, Chrome/Chromium, Safari, IE7/8 
+ * Full working with FireFox, Chrome/Chromium, Safari, IE7/8
 
 How to use
 ----------
-
 You need a textarea with the html id, example:
     
     #HTML
@@ -27,29 +24,22 @@ Then include the MooContentAssist.js, and add this script for a new istance:
    
     #JS
     window.addEvent("domready",function(){
-        new MooContentAssist("myeditor",{
-            words: {
-                "$content": {
-                    "Immagine": ["getImagePath(\"\")","text"],
-                    "CorpoTesto":  ["text","textBeforeImage(0)","textAfterImage(0)","textByRange(0,0)"],
-                    "Abstract":  ["text"],
-                    "Allegati":  ["size()"],
-                    "categories":  [null],
-                    "DataInizio":  ["shortDate","fullDate","mediumDate","getFormattedDate(\"\")"],
-                    "DataFine":  ["shortDate","fullDate","mediumDate","getFormattedDate(\"\")"],
-                    "SitoWeb": ["destination","text"]
-                },
-                "$18n": ["getLabel(\"\")"],
-                "a": ["a1111","a2222","a33333"],
-                "albatros": ["quack"],
-                "b": ["bbb111","bbbbb2222","word-b2"],
-                "babbalotto": ["ouch"],
-                "c": [null],
-                "contentAssist": ["help","editor","start"]
-            }
-        });
+		var editorAssisted = new MooContentAssist( {
+			"source": document.id("editor"),
+			"vocabulary" : {
+				"key0": null,
+				"key1": ["subkey1","subkey2","subkey3"],
+				"key2": {
+					"subsubkey1": null,
+					"subsubkey2": ["a","b","c"],
+					"subsubkey3": {
+						"a": null,
+						"b": ["1","2","3"]
+					}
+				}
+			}
+		});
     });
-
 
 Eeverything works if you give the right json words object.
 Use this as root: 
@@ -76,12 +66,13 @@ If the key has sub-keys you must use objects:
 	  "subkey3": ["word","word","word"]
 	}
 
-Obviously you could have infinite levels :)
+Obviously you could have infinite sub-levels :)
 
 Please see index.html in the git repo if you need a working example. :)
 
 ChangeLog
 -----------
+* 06 Mar 2011 v0.80 - internal API rewritten, now working with MooTools 1.3, several bugfixes.
 * 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
 * 27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
 * 11 Jun 2010 v0.70 - configurable number of item shown in the box

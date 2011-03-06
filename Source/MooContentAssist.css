@@ -1,0 +1,35 @@
+.MooContentAssist {
+	border: 1px solid black;
+	height: 60px;
+	background-color: #414E67;
+	color: #fff;
+	position: absolute;
+	z-index: 10;
+	opacity: 1;
+}
+.item {
+	margin: 0;
+	cursor: pointer;
+	border: 1px solid #414E67;
+	padding: 0.25em;
+}
+.itemSelected {
+	border: 1px solid #414E67;
+	background-color: #51607C;
+}
+.message {
+	margin: 0;
+	cursor: pointer;
+}
+
+#discovered {
+	font-style: italic;
+}
+
+textarea {
+	width: 90%;
+	height: 100px;
+}
+
+#editor {
+}
