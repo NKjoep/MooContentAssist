@@ -91,4 +91,4 @@ ChangeLog
 Screenshots
 -----------
 
-![Screenshot 1](http://github.com/NKjoep/MooContentAssist/raw/master/img/screenshot.png)
+![Screenshot 1](http://moocontentassist.altervista.org/img/screenshot.png)
