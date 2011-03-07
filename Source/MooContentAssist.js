@@ -473,14 +473,13 @@ var MooContentAssist = new Class({
 		w.addEvents(itemsEventsObj);
 		var sourceEl = this.options.source;
 		var sourceElPosition=sourceEl.getPosition(); 
-		var sourceElSize = sourceEl.getComputedSize();
-		var sourceElScroll = sourceEl.getScrollTop();
+		var sourceElSize = sourceEl.getDimensions();
 		w.inject(this.options.source,"after");
 		var top = sourceElPosition.y+sourceElSize.height+this.options.windowPadding.y;
 		var left= sourceElPosition.x+this.options.windowPadding.x;
 		w.setStyles({
 			"overflow": "auto",
-			"width": sourceElSize.totalWidth,
+			"width": sourceElSize.width,
 			"left": left,
 			"top": top
 		});	
