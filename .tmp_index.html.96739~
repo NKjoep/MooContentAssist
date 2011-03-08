@@ -124,7 +124,7 @@ window.addEvent("domready", function() {
 	<body> 
 		<h1><label for="editor">MooContentAssist v0.80</label></h1>
 		<p>This software is released under GNU General Public License, version 2.</p>			
-		<p>Author: <a href="mailto:nkjoep@gmail.com">Andrea Dess&igrave;</a>.</p>
+		<p>Author: <a href="mailto:nkjoep@gmail.com">Andrea Dessì</a>.</p>
 		<hr />
 		<h2 id="demo">Demo</h2>
 		<form action="#" method="get">
