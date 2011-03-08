@@ -63,7 +63,8 @@ var MooContentAssist = new Class({
 		vocabularyUrlParam: "ns",
 		vocabularyUrlMethod: "get",
 		windowPadding: {x: 0, y: 5},
-		itemType: "p",
+		itemType: "li",
+		itemsContainer: "ul",
 		aggressiveAssist: true,
 		namespaceDelimiters: [" ","\n","\t","\"",",",";","=","(",")","[","]",";","{","}","<",">","+","-",'\\',"!","&","|"],
 		css : {
@@ -458,6 +459,11 @@ var MooContentAssist = new Class({
 		var w = new Element("div",{
 			"class": "MooContentAssist"
 		});
+		
+		if (this.options.itemsContainer!=null) {
+			new Element(this.options.itemsContainer).inject(w);
+		}
+		
 		this.options.source.store("MooContentAssist",w);
 		var itemsEventsObj = {};
 			itemsEventsObj['click:relay(.'+this.options.css.item+')'] = function(ev){ 
@@ -534,6 +540,7 @@ var MooContentAssist = new Class({
 		this.options.source.store("MooContentAssist",null);
 		this._eventManager();
 		this.oldNamespace=false;
+		this._prefixSelector = this.options.itemsContainer!=null?this.options.itemsContainer+" .":".";
 	},
 	scrollToItem: function(item) {
 		var w = this.getAssistWindow();
@@ -572,7 +579,7 @@ var MooContentAssist = new Class({
 			prevItem = this.getAssistWindow().getFirst("."+this.options.css.item);
 		}
 		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getFirst("."+this.options.css.item)); }	
+		else { this._setItemSelected(this.getAssistWindow().getFirst(this._prefixSelector+this.options.css.item)); }	
 	},
 	selectItemUp: function() {
 		var currentItem = this.getItemSelected();
@@ -584,7 +591,7 @@ var MooContentAssist = new Class({
 			prevItem = this.getAssistWindow().getLast("."+this.options.css.item);
 		}
 		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getLast()); }
+		else { this._setItemSelected(this.getAssistWindow().getLast(this._prefixSelector+this.options.css.item)); }
 	},
 	setAggressiveAssist: function(aggressiveStatus) {
 		if (typeOf(aggressiveStatus)=="boolean"){
@@ -596,7 +603,7 @@ var MooContentAssist = new Class({
 		vocabulary = Array.from(vocabulary);
 		for (var i=0;i<vocabulary.length;i++) {
 			var currentWord = vocabulary[i];
-			currentWord.inject(w);
+			currentWord.inject(w.getElement("ul"));
 		}
 		this.setFrameSize();
 		this.selectItemDown();
