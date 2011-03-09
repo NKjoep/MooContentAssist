@@ -29,22 +29,22 @@ provides: [MooContentAssist]
 
     Changelog:
     
-    	08 Mar 2011 v.081 - configurable items container inside the main box
-    	06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
-        01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
-        27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
-        11 Jun 2010 v0.70 - configurable number of item shown in the box
-        10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
-        04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
-        24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
-        23 May 2010 v0.66 - first dot fixed, occurence text highlight fixed, animation now is a parameter
-        22 May 2010 v0.64 - ie7 fixes
-        21 May 2010 v0.63 - added events "click" and "over" to the shown items, when showing assistWindow first item is already selected, added "." trigger
-        21 May 2010 v0.60 - added styles for items, window positioning 
-        20 May 2010 v0.55 - fixed textarea events
-        16 May 2010 v0.25 - fixed words data structure
-        15 May 2010 v0.15 - added completed text, events and keys
-        13 May 2010 v0.0  - hello word	
+08 Mar 2011 v.081 - configurable items container inside the main box
+06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
+01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
+27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
+11 Jun 2010 v0.70 - configurable number of item shown in the box
+10 Jun 2010 v0.70 - scrollable result box, scrollable result box shows always the current item in the middle
+04 Jun 2010 v0.68 - few standard methods for positioning, css rules methods
+24 May 2010 v0.68 - fixed textarea scroll when inserting keywords, fixed assistWindow position
+23 May 2010 v0.66 - first dot fixed, occurence text highlight fixed, animation now is a parameter
+22 May 2010 v0.64 - ie7 fixes
+21 May 2010 v0.63 - added events "click" and "over" to the shown items, when showing assistWindow first item is already selected, added "." trigger
+21 May 2010 v0.60 - added styles for items, window positioning 
+20 May 2010 v0.55 - fixed textarea events
+16 May 2010 v0.25 - fixed words data structure
+15 May 2010 v0.15 - added completed text, events and keys
+13 May 2010 v0.0  - hello word	
     
     Info:
 	
@@ -65,11 +65,12 @@ var MooContentAssist = new Class({
 		vocabularyUrlMethod: "get",
 		windowPadding: {x: 0, y: 5},
 		itemType: "li",
-		itemsContainer: "ul",
+		itemsContainerType: "ul",
 		aggressiveAssist: true,
 		namespaceDelimiters: [" ","\n","\t","\"",",",";","=","(",")","[","]",";","{","}","<",">","+","-",'\\',"!","&","|"],
 		css : {
 			item: "item",
+			itemsContainer: "itemsContainer",
 			itemSelected: "itemSelected",
 			messageItem: "message" 
 		},
@@ -78,19 +79,19 @@ var MooContentAssist = new Class({
 			ajaxError: "Error while retrieving data."
 		},
 		vocabularyManager_Render: function(obj) {
-			var rendered = new Element(this.options.itemType,{text: obj, "class": this.options.css.item});;
+			var rendered = new Element(this.options.itemType,{text: obj, "class": this.options.css.item});
 			rendered.store("value",obj);
 			return rendered; 
 		},
 		vocabularyManager_Extract: function(namespace,vocabulary) {
-			if (namespace[0] == "") { 
+			if (namespace[0] === "") { 
 				namespace=Array.clone(namespace);
 				namespace.shift(); 
 			}
 			var vocabularyFound = [];
 			var found = null;
 			var searchKey = null;
-			if (namespace.length == 1){
+			if (namespace.length === 1){
 				found = vocabulary; 
 				if (namespace[0] != "/") {
 					searchKey = namespace[0];
@@ -461,10 +462,6 @@ var MooContentAssist = new Class({
 			"class": "MooContentAssist"
 		});
 		
-		if (this.options.itemsContainer!=null) {
-			new Element(this.options.itemsContainer).inject(w);
-		}
-		
 		this.options.source.store("MooContentAssist",w);
 		var itemsEventsObj = {};
 			itemsEventsObj['click:relay(.'+this.options.css.item+')'] = function(ev){ 
@@ -489,7 +486,14 @@ var MooContentAssist = new Class({
 			"width": sourceElSize.width,
 			"left": left,
 			"top": top
-		});	
+		});
+		
+		if (this.options.itemsContainerType!=null) {
+			new Element(this.options.itemsContainerType, {
+				"class": this.options.css.itemsContainer
+			}).inject(w,"bottom");
+		}
+		
 		return w;
 	},
 	end: function() {
@@ -538,37 +542,49 @@ var MooContentAssist = new Class({
 	},
 	initialize: function(options) {
 		this.setOptions(options);
+		if (options.itemsContainer==null) {
+			this.options.itemsContainer=null;
+		}
 		this.options.source.store("MooContentAssist",null);
 		this._eventManager();
 		this.oldNamespace=false;
-		this._prefixSelector = this.options.itemsContainer!=null?this.options.itemsContainer+" .":".";
+		this._itemsSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.item;
 	},
 	scrollToItem: function(item) {
 		var w = this.getAssistWindow();
-		var animationScroller = w.retrieve("MooContentAssist-AnimationScroller");
-		if (animationScroller == null) {
-			assistWindowScroller = new Fx.Scroll(w,{
-                duration: this.options.animationDuration,
-                offset: {"x": 0, "y": w.getStyle('padding-top').toInt()*-1}
-            });
-            w.store("MooContentAssist-AnimationScroller",animationScroller);
+		if (w!=null && item!=null) {
+			var animationScroller = w.retrieve("MooContentAssist-AnimationScroller");
+			if (animationScroller == null) {
+				assistWindowScroller = new Fx.Scroll(w,{
+		            duration: this.options.animationDuration,
+		            offset: {"x": 0, "y": w.getStyle('padding-top').toInt()*-1}
+		        });
+		        w.store("MooContentAssist-AnimationScroller",animationScroller);
+			}
+			//item height
+		    var i = item.getComputedSize({"styles": ["margin","padding","border"]}).totalHeight;
+		    //box height
+		    var f = (w.getComputedSize({"styles": ["padding"]}).totalHeight/i).toInt();
+		    //children
+		    var children = w.getElements("."+this.options.css.item);
+		    //current item
+		    var c = children.indexOf(item);
+		    //index
+		    var indexToScrollTo = ((c/f).toInt()) * f; 
+			//calculate the current "frame"
+			if (c > (f/2).toInt()) {
+				indexToScrollTo = c - (f/2).toInt(); 
+			}
+			//scroll to item at that index
+			if(document.getElement(children[indexToScrollTo])!=null) {
+				try {
+					assistWindowScroller.toElement(children[indexToScrollTo]);
+				} catch(e) {
+					//sometimes IE fires errors...
+					w.store("MooContentAssist-AnimationScroller",null);
+				}
+			}
 		}
-		//item height
-        var i = item.getComputedSize({"styles": ["margin","padding","border"]}).totalHeight;
-        //box height
-        var f = (w.getComputedSize({"styles": ["padding"]}).totalHeight/i).toInt();
-        //children
-        var children = w.getElements("."+this.options.css.item);
-        //current item
-        var c = children.indexOf(item);
-        //index
-        var indexToScrollTo = ((c/f).toInt()) * f; 
-		//calculate the current "frame"
-		if (c > (f/2).toInt()) {
-			indexToScrollTo = c - (f/2).toInt(); 
-		}
-		//scroll to item at that index
-        assistWindowScroller.toElement(children[indexToScrollTo]);
 	},
 	selectItemDown: function() {
 		var currentItem = this.getItemSelected();
@@ -580,7 +596,7 @@ var MooContentAssist = new Class({
 			prevItem = this.getAssistWindow().getFirst("."+this.options.css.item);
 		}
 		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getFirst(this._prefixSelector+this.options.css.item)); }	
+		else { this._setItemSelected(this.getAssistWindow().getFirst(this._itemsSelector)); }	
 	},
 	selectItemUp: function() {
 		var currentItem = this.getItemSelected();
@@ -592,7 +608,7 @@ var MooContentAssist = new Class({
 			prevItem = this.getAssistWindow().getLast("."+this.options.css.item);
 		}
 		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getLast(this._prefixSelector+this.options.css.item)); }
+		else { this._setItemSelected(this.getAssistWindow().getLast(this._itemsSelector)); }
 	},
 	setAggressiveAssist: function(aggressiveStatus) {
 		if (typeOf(aggressiveStatus)=="boolean"){
@@ -601,13 +617,20 @@ var MooContentAssist = new Class({
 	},
 	setAssistWindowContent: function(vocabulary) {
 		var w = this.getAssistWindow();
-		vocabulary = Array.from(vocabulary);
-		for (var i=0;i<vocabulary.length;i++) {
-			var currentWord = vocabulary[i];
-			currentWord.inject(w.getElement("ul"));
+		if (w!=null) {
+			vocabulary = Array.from(vocabulary);
+
+			var injectBindElement = this.options.itemsContainer==null? w : w.getElement(this.options.itemsContainer);
+			var inject = function(word) {
+				word.inject(this);
+			}.bind(injectBindElement);
+			for (var i=0;i<vocabulary.length;i++) {
+				var currentWord = vocabulary[i];
+				inject(currentWord);
+			}
+			this.setFrameSize();
+			this.selectItemDown();
 		}
-		this.setFrameSize();
-		this.selectItemDown();
 	},
 	setFrameSize: function(size) {
 		if(typeOf(size) != "number") { size = this.options.frameSize; }
@@ -632,7 +655,8 @@ var MooContentAssist = new Class({
 	start: function() {
 		var mca = this.getAssistWindow();
 		if (mca!=null) {
-			mca.empty();
+			this.end();
+			this.createAssistWindow();
 		}
 		var value = this.getSourceValue();
 		var namespace = this.getNameSpace(value);
