@@ -510,7 +510,7 @@ var MooContentAssist = new Class({
 		var w = this.getAssistWindow();
 		var item = null;
 		if (w!=null) {
-			item = w.getElement("."+this.options.css.itemSelected);
+			item = w.getElement(this._itemSelectedSelector);
 		}
 		return item;
 	},
@@ -549,6 +549,8 @@ var MooContentAssist = new Class({
 		this._eventManager();
 		this.oldNamespace=false;
 		this._itemsSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.item;
+		this._itemSelectedSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.itemSelected;
+		this._messageSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.messageItem;
 	},
 	scrollToItem: function(item) {
 		var w = this.getAssistWindow();
@@ -566,7 +568,7 @@ var MooContentAssist = new Class({
 		    //box height
 		    var f = (w.getComputedSize({"styles": ["padding"]}).totalHeight/i).toInt();
 		    //children
-		    var children = w.getElements("."+this.options.css.item);
+		    var children = w.getElements(this._itemsSelector);
 		    //current item
 		    var c = children.indexOf(item);
 		    //index
@@ -590,10 +592,10 @@ var MooContentAssist = new Class({
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
 		if (currentItem!=null) {
-			prevItem = currentItem.getNext("."+this.options.css.item);
+			prevItem = currentItem.getNext(this._itemsSelector);
 		}
 		else {
-			prevItem = this.getAssistWindow().getFirst("."+this.options.css.item);
+			prevItem = this.getAssistWindow().getFirst(this._itemsSelector);
 		}
 		if (prevItem != null) { this._setItemSelected(prevItem); }
 		else { this._setItemSelected(this.getAssistWindow().getFirst(this._itemsSelector)); }	
@@ -602,10 +604,10 @@ var MooContentAssist = new Class({
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
 		if (currentItem!=null) {
-			prevItem = currentItem.getPrevious("."+this.options.css.item);
+			prevItem = currentItem.getPrevious(this._itemsSelector);
 		}
 		else {
-			prevItem = this.getAssistWindow().getLast("."+this.options.css.item);
+			prevItem = this.getAssistWindow().getLast(this._itemsSelector);
 		}
 		if (prevItem != null) { this._setItemSelected(prevItem); }
 		else { this._setItemSelected(this.getAssistWindow().getLast(this._itemsSelector)); }
@@ -634,13 +636,13 @@ var MooContentAssist = new Class({
 	},
 	setFrameSize: function(size) {
 		if(typeOf(size) != "number") { size = this.options.frameSize; }
-		var selector = "."+this.options.css.item;
+		var selector = this._itemsSelector;
 		var w = this.getAssistWindow();
 		var children = w.getElements(selector);
 		var childrenLength = children.length > 0 ? children.length : 1;
 		if (childrenLength<size) { size = childrenLength;}
 		var exampleItem = w.getElement(selector);
-		if (exampleItem==null) exampleItem = w.getElement("."+this.options.css.messageItem);
+		if (exampleItem==null) exampleItem = w.getElement(this._messageSelector);
 		if (exampleItem!= null) {
 			w.setStyle("height",(exampleItem.getComputedSize({
 				"styles": ["padding","margin","border"]

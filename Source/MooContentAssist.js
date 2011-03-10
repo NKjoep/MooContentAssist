@@ -493,7 +493,6 @@ var MooContentAssist = new Class({
 				"class": this.options.css.itemsContainer
 			}).inject(w,"bottom");
 		}
-		
 		return w;
 	},
 	end: function() {
@@ -510,7 +509,7 @@ var MooContentAssist = new Class({
 		var w = this.getAssistWindow();
 		var item = null;
 		if (w!=null) {
-			item = w.getElement("."+this.options.css.itemSelected);
+			item = w.getElement(this._prefixItemsSelector+this.options.css.itemSelected);
 		}
 		return item;
 	},
@@ -540,15 +539,18 @@ var MooContentAssist = new Class({
 		if(this.getAssistWindow()!=null) this.getAssistWindow().dissolve();
 		this.fireEvent("hide");
 	},
-	initialize: function(options) {
-		this.setOptions(options);
-		if (options.itemsContainer==null) {
-			this.options.itemsContainer=null;
+	initialize: function(opt) {
+		this.setOptions(opt);
+		if (opt.itemsContainerType===null) {
+			this.options.itemsContainerType = null;
+			this._prefixItemsSelector=".";
+		}
+		else {
+			this._prefixItemsSelector="."+this.options.css.itemsContainer+" .";
 		}
 		this.options.source.store("MooContentAssist",null);
 		this._eventManager();
 		this.oldNamespace=false;
-		this._itemsSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.item;
 	},
 	scrollToItem: function(item) {
 		var w = this.getAssistWindow();
@@ -566,7 +568,7 @@ var MooContentAssist = new Class({
 		    //box height
 		    var f = (w.getComputedSize({"styles": ["padding"]}).totalHeight/i).toInt();
 		    //children
-		    var children = w.getElements("."+this.options.css.item);
+		    var children = w.getElements(this._prefixItemsSelector+this.options.css.item);
 		    //current item
 		    var c = children.indexOf(item);
 		    //index
@@ -590,25 +592,33 @@ var MooContentAssist = new Class({
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
 		if (currentItem!=null) {
-			prevItem = currentItem.getNext("."+this.options.css.item);
+			prevItem = currentItem.getNext();
 		}
 		else {
-			prevItem = this.getAssistWindow().getFirst("."+this.options.css.item);
+			prevItem = this.getAssistWindow().getFirst(this._prefixItemsSelector+this.options.css.item);
 		}
-		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getFirst(this._itemsSelector)); }	
+		if (prevItem != null) { 
+			this._setItemSelected(prevItem); 
+		}
+		else { 
+			this._setItemSelected(this.getAssistWindow().getFirst(this._prefixItemsSelector+this.options.css.item)); 
+		}	
 	},
 	selectItemUp: function() {
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
 		if (currentItem!=null) {
-			prevItem = currentItem.getPrevious("."+this.options.css.item);
+			prevItem = currentItem.getPrevious();
 		}
 		else {
-			prevItem = this.getAssistWindow().getLast("."+this.options.css.item);
+			prevItem = this.getAssistWindow().getLast(this._prefixItemsSelector+this.options.css.item);
 		}
-		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getLast(this._itemsSelector)); }
+		if (prevItem != null) { 
+			this._setItemSelected(prevItem); 
+		}
+		else { 
+			this._setItemSelected(this.getAssistWindow().getLast(this._prefixItemsSelector+this.options.css.item));
+		}
 	},
 	setAggressiveAssist: function(aggressiveStatus) {
 		if (typeOf(aggressiveStatus)=="boolean"){
@@ -620,7 +630,7 @@ var MooContentAssist = new Class({
 		if (w!=null) {
 			vocabulary = Array.from(vocabulary);
 
-			var injectBindElement = this.options.itemsContainer==null? w : w.getElement(this.options.itemsContainer);
+			var injectBindElement = this.options.itemsContainerType==null? w : w.getElement("."+this.options.css.itemsContainer);
 			var inject = function(word) {
 				word.inject(this);
 			}.bind(injectBindElement);
@@ -634,18 +644,18 @@ var MooContentAssist = new Class({
 	},
 	setFrameSize: function(size) {
 		if(typeOf(size) != "number") { size = this.options.frameSize; }
-		var selector = "."+this.options.css.item;
+		var selector = this._prefixItemsSelector+this.options.css.item;
 		var w = this.getAssistWindow();
 		var children = w.getElements(selector);
 		var childrenLength = children.length > 0 ? children.length : 1;
 		if (childrenLength<size) { size = childrenLength;}
 		var exampleItem = w.getElement(selector);
-		if (exampleItem==null) exampleItem = w.getElement("."+this.options.css.messageItem);
-		if (exampleItem!= null) {
-			w.setStyle("height",(exampleItem.getComputedSize({
-				"styles": ["padding","margin","border"]
-			}).totalHeight * size) + "px"); 
+		if (exampleItem==null) {
+			exampleItem = w.getElement(this._prefixItemsSelector+this.options.css.messageItem);
 		}
+		w.setStyle("height",(exampleItem.getComputedSize({
+			"styles": ["padding","margin","border"]
+		}).totalHeight * size) + "px");
 	},
 	show: function() {
 		if(this.getAssistWindow()!=null) this.getAssistWindow().reveal();
