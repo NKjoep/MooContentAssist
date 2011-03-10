@@ -29,7 +29,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
-08 Mar 2011 v.081 - configurable items container inside the main box
+08 Mar 2011 v.080.1 - configurable items container inside the main box
 06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
 27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
