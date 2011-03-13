@@ -48,11 +48,11 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - 0.80
-		Date - 06 Mar 2011
+		Version - v.080.1
+		Date - 08 Mar 2011
 */
 var MooContentAssist = new Class({
-	version: "MooContentAssist v0.80",
+	version: "MooContentAssist v0.80.1",
 	Implements: [Events, Options],
 	options: {
 		source: null,
@@ -386,11 +386,11 @@ var MooContentAssist = new Class({
 			}
 			var endPosition = caretPosition;
 			var position=endPosition-1;
-			var test = true;
-			var previousChar = "";
+			var test=true;
+			var previousChar="";
 			while(position >= 0 && test) {
 				var c = nameSpaceString.substring(position,position+1);
-				if (namespaceDelimiters.contains(c)) { 
+				if (namespaceDelimiters.contains(c)) {
 					test = false;
 				}
 				else {
@@ -407,7 +407,22 @@ var MooContentAssist = new Class({
 			var namespaceFlat = nameSpaceString.substring(position+1,endPosition).trim();
 			if (namespaceFlat.length > 0 && namespaceFlat != ".") {
 				namespace = namespaceFlat.split(".");
-				if (namespace[namespace.length-1] == "") namespace[namespace.length-1] = "/"; 
+				if (namespace[namespace.length - 1] == "") {
+					namespace[namespace.length-1] = "/";
+				} 
+				var indexEmpty = null;
+				var itemAllLengthGreatherThan0 = namespace.every(function(item,index){
+					if (item.length==0) {
+						indexEmpty = index;
+						return false;
+					}
+					else if (item.length>0) {
+						return true;
+					} 
+				});
+				if (!itemAllLengthGreatherThan0) {
+					namespace = namespace.slice(indexEmpty+1);					
+				}
 			}
 			else if (namespaceFlat.length == 1 && namespaceFlat == ".") {
 				namespace = ["/"];

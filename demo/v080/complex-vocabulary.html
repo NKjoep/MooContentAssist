@@ -29,6 +29,36 @@
 		<script type="text/javascript" src="../../Source/MooContentAssist.js"></script>
         <script type="text/javascript">
 window.addEvent("domready", function() {
+	
+	var renderer = function(obj){
+		var rendered = new Element(this.options.itemType, {
+			"class": this.options.css.item
+		});
+		
+		var text = null;
+		var key = null;
+		
+		if (typeOf(obj) == "object") {
+			key = obj.key;
+			text = key;
+			if (obj.info !== undefined) {
+				text = text + " - " + obj.info.type;
+				var img = new Element("img",{
+					"src": "img/type-"+obj.info.type+".png"
+				});
+				img.inject(rendered);
+			}
+		}
+		else {
+			key = obj;
+			text = obj;
+		}
+		rendered.appendText(text);		
+		rendered.store("value", key);
+		
+		return rendered;
+	}
+	
 	var editorAssisted = new MooContentAssist({
 		frameSize: 3,
 		aggressiveAssist: true,
@@ -108,74 +138,111 @@ window.addEvent("domready", function() {
 			}
 			return vocabularyFound;
 		},
-		vocabularyManager_Render: function(obj) {
-			var text = null;
-			var key = null;
-			if (typeOf(obj)=="object") {
-				key = obj.key;
-				text = key;				
-				if(obj.info!==undefined) {
-					text = text+" - "+obj.info.type;
-				}
-			}
-			else {
-				key = obj;
-				text = obj;
-			}
-			
-			var rendered = new Element(this.options.itemType,{
-				"text": text, 
-				"class": this.options.css.item
-			});
-			
-			rendered.store("value",key);
-			return rendered;
-		},
+		vocabularyManager_Render: renderer,
 		vocabulary: {
-			"word1": {
-				"info": {"type": "type1"},
+			"aString": {
+				"info": {
+					"type": "string"
+				}
+			},
+			"aFunctionImportant": {
+				"info": {
+					"type": "function-important"
+				}
+			},
+			"aFunctionSimple": {
+				"info": {
+					"type": "function-simple"
+				}
+			},
+			"aNumber": {
+				"info": {
+					"type": "number"
+				}
+			},
+			"anObject": {
+				"info": {
+					"type": "object"
+				}
+			},
+			"word1()": {
+				"info": {"type": "function-important"},
 				"children": {
 					"a1": {
-						"info": {"type": "type2"},
+						"info": {"type": "object"},
 						"children": {
-							"aa1": {"type": "type2"},
-							"bb1": {"type": "type3"}
+							"aa1": {"info": {"type": "number"}},
+							"bb1": {
+								"info": {
+									"type": "typestring"
+								}
+							}
 						}
 					},
 					"aaaaaaaaaaa1": {
-						"info": {"type": "type2"},
+						"info": {"type": "function-simple"},
 						"children": {
-							"aa1": {"type": "type2"},
-							"bb1": {"type": "type3"}
+							"aa1": {
+								"info": {
+									"type": "function-simple"
+								}
+							},
+							"bb1": {
+								"info": {
+									"type": "number"
+								}
+							}
 						}
 					},
 					"aaaabbbb1": {
-						"info": {"type": "type2"},
+						"info": {
+								"type": "object"
+						},
 						"children": {
-							"aa1": {"type": "type2"},
-							"bb1": {"type": "type3"}
+							"aa1": {
+								"info": {
+									"type": "string"
+								}
+							},
+							"bb1": {
+								"info": {
+									"type": "object"
+								}
+							}
 						}
 					},
 					"aabbBbbBBBbbb1": {
-						"info": {"type": "type2"},
+						"info": {
+								"type": "object"
+						},
 						"children": {
-							"aa1": {"type": "type2"},
-							"bb1": {"type": "type3"}
+							"aa1": {
+								"info": {
+									"type": "string"
+								}
+							},
+							"bb1": {
+								"info": {
+									"type": "number"
+								}
+							}
 						}
 					},
 					"b1": {
-						"info": {"type": "type3"}
+						"info": {
+								"type": "function-important"
+						}
 					}
 				}
 			},
 			"word2": {
-				"info": {"type": "type1"},
+				"info": {"type": "function-important"},
 				"children": {
 					"a2": {
-						"info": {"type": "type2"}
+						"info": {"type": "function-simple"}
 					},
 					"b2": {
-						"info": {"type": "type3"}
+						"info": {"type": "string"}
 					}
 				}
 			}
