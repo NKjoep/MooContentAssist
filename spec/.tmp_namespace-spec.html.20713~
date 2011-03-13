@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>namepsace parser - JSSpec results</title>
+<link rel="stylesheet" type="text/css" href="JSSpec-lib/JSSpec.css" />
+<script type="text/javascript" src="JSSpec-lib/diff_match_patch.js"></script>
+<script type="text/javascript" src="JSSpec-lib/JSSpec.js"></script>
+<script type="text/javascript" src="../js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
+<script type="text/javascript" src="../Source/MooContentAssist.js"></script>
+<script type="text/javascript">// <![CDATA[
+
+var JSSpecTest = {
+	MooContentAssist: {
+		_namespaceParser: function(nameSpaceString,caretPosition,namespaceDelimiters) {
+			return MooContentAssist.prototype._namespaceParser.call(MooContentAssist.prototype,nameSpaceString,caretPosition,namespaceDelimiters);
+		}
+	}
+};
+
+/* 
+ * these are working outside the class
+ * 
+describe('String to test:  *null*', {
+	'must return one element': function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser(null);
+		value_of(ns).should_have_exactly(1, "items");
+	},
+	"the element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser(null)[0];
+		expect(ns).should_be("/");
+	}
+});
+*/
+describe("String to test:  | |", {
+	"at position 1 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser(" ",1);
+		value_of(ns).should_have_exactly(1, "items");
+	},
+	"at position 1 - the element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser(" ",1)[0];
+		expect(ns).should_be("/");
+	},
+	"at position 0 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser(" ",0);
+		value_of(ns).should_have_exactly(1, "items");
+	},
+	"at position 0 - the element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser(" ",0)[0];
+		expect(ns).should_be("/");
+	}
+});
+describe("String to test:  |ExampleString|", {
+	"at position 0 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("ExampleString",0);
+		value_of(ns).should_have_exactly(1, "items");
+	},
+	"at position 0 - the element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("ExampleString",0)[0];
+		expect(ns).should_be("/");
+	},
+	"at position 7 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("ExampleString",7);
+		value_of(ns).should_have_exactly(1, "items");
+	},
+	"at position 7 - the element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("ExampleString",7)[0];
+		expect(ns).should_be("Example");
+	},
+	"at position 13 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("ExampleString",13);
+		value_of(ns).should_have_exactly(1, "items");
+	},
+	"at position 13 - the element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("ExampleString",13)[0];
+		expect(ns).should_be("ExampleString");
+	}
+});
+describe("String to test:  |Example.String|", {
+	"at position 8 - must return two element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example.String",8);
+		value_of(ns).should_have_exactly(2, "items");
+	},
+	"at position 8 - the first element must be [Example]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example.String",8)[0];
+		expect(ns).should_be("Example");
+	},
+	"at position 8 - the second element must be [/]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example.String",8)[1];
+		expect(ns).should_be("/");
+	},
+	"at position 14 - the first element must be[Example]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example.String",14)[0];
+		expect(ns).should_be("Example");
+	},
+	"at position 14 - the second element must be[String]": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example.String",14)[1];
+		expect(ns).should_be("String");
+	}
+});
+describe("String to test:  |Example String|", {
+	"at position 8 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example String",8);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("/");
+	},
+	"at position 14 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example String",14);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("String");
+	}
+	
+});
+describe("String to test:  |Example\nString|", {
+	"at position 8 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example\nString",8);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("/");
+	},
+	"at position 14 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("Example\nString",14);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("String");
+	}
+	
+});
+
+describe("String to test:  |kkk1 eee2 yyy3|", {
+	"at position 8 - must return one element": function() {
+		var ns = JSSpecTest.MooContentAssist._namespaceParser("kkk1\neee2\nyyy3",8);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("eee");
+	},
+	"at position 8 - with different Delimitiers |kkk1()eee2[]yyy3|": function() {
+		var ns=null;
+		ns=JSSpecTest.MooContentAssist._namespaceParser("kkk1()eee2[]yyy3",8);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("ee");
+	},
+	"at position 11 - with different Delimitiers |kkk1()eee2[]yyy3|": function() {
+		var ns=null;
+		ns=JSSpecTest.MooContentAssist._namespaceParser("kkk1()eee2[]yyy3",11);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("/");
+	},
+	'at position 11 - with different Delimitiers 2 |kkk1("eee2",yyy3)|': function() {
+		var ns=null;
+		ns=JSSpecTest.MooContentAssist._namespaceParser('kkk1("eee2",yyy3)',11);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("/");
+	},
+	'at position 12 - with different Delimitiers 2 |kkk1("eee2",yyy3)|': function() {
+		var ns=null;
+		ns=JSSpecTest.MooContentAssist._namespaceParser('kkk1("eee2",yyy3)',12);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("/");
+	},
+	'at position 13 - with different Delimitiers 2 |kkk1("eee2",yyy3)|': function() {
+		var ns=null;
+		ns=JSSpecTest.MooContentAssist._namespaceParser('kkk1("eee2",yyy3)',13);
+		value_of(ns).should_have_exactly(1, "items");
+		expect(ns[0]).should_be("y");
+	}
+});
+
+// ]]></script>
+</head>
+<body><textarea id="t"></textarea></body>
+</html>
