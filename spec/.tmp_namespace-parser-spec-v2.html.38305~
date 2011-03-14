@@ -401,18 +401,6 @@ describe("String to test: |write here [[squarebrackets]].|", {
 	}
 });
 
-describe("String to Test: |{{ftw}}.|",{
-	"sub single key": function() {
-		var valid = ["{{","}}"]
-		var stringToTest = "{{ftw}}.";
-		var ns;
-		ns= MooContentAssist_JSSpec.namespaceParser2(stringToTest,8,valid);
-		value_of(ns).should_have_exactly(2, "items");
-		value_of(ns[0]).should_be("{{ftw}}");
-		value_of(ns[1]).should_be("/");
-	}
-});
-
 // ]]></script>
 </head>
 <body><textarea id="t"></textarea></body>

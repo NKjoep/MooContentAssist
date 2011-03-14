@@ -68,7 +68,7 @@ var MooContentAssist = new Class({
 		itemType: "li",
 		itemsContainerType: "ul",
 		aggressiveAssist: true,
-		namespaceAllowed: ["()", "$", "(\"\")"],
+		namespaceAllowed: ["()", "$"],
 		css : {
 			item: "item",
 			itemsContainer: "itemsContainer",
@@ -89,7 +89,6 @@ var MooContentAssist = new Class({
 				namespace=Array.clone(namespace);
 				namespace.shift(); 
 			}
-			console.log("input ns",namespace);
 			var vocabularyFound = [];
 			var found = null;
 			var searchKey = null;
@@ -97,34 +96,34 @@ var MooContentAssist = new Class({
 				found = vocabulary; 
 				if (namespace[0] != "/") {
 					searchKey = namespace[0];
-						searchKey = searchKey.replace(/\*/g,"\\\\*");
-						searchKey = searchKey.replace(/\./g,"\\\\.");
-						searchKey = searchKey.replace(/\?/g,"\\\\?");
-						searchKey = searchKey.replace(/\[/g,"\\\\[");
-						searchKey = searchKey.replace(/\]/g,"\\\\]");
-						searchKey = searchKey.replace(/\(/g,"\\\\(");
-						searchKey = searchKey.replace(/\)/g,"\\\\)");
-						searchKey = searchKey.replace(/\{/g,"\\\\{");
-						searchKey = searchKey.replace(/\}/g,"\\\\}");
-						searchKey = searchKey.replace(/\^/g,"\\\\^");
-						searchKey = searchKey.replace(/\$/g,"\\\\$");
+						searchKey = searchKey.replace(/\*/g,"\\\*");
+						searchKey = searchKey.replace(/\./g,"\\\.");
+						searchKey = searchKey.replace(/\?/g,"\\\?");
+						searchKey = searchKey.replace(/\[/g,"\\\[");
+						searchKey = searchKey.replace(/\]/g,"\\\]");
+						searchKey = searchKey.replace(/\(/g,"\\\(");
+						searchKey = searchKey.replace(/\)/g,"\\\)");
+						searchKey = searchKey.replace(/\{/g,"\\\{");
+						searchKey = searchKey.replace(/\}/g,"\\\}");
+						searchKey = searchKey.replace(/\^/g,"\\\^");
+						searchKey = searchKey.replace(/\$/g,"\\\$");
 				}
 			}
 			else if (namespace.length > 1) {
 				if (namespace[namespace.length-1] != "/") {
 					searchKey = namespace[namespace.length-1];
-						searchKey = searchKey.replace(/\|/g,"\\\\|");
-						searchKey = searchKey.replace(/\*/g,"\\\\*");
-						searchKey = searchKey.replace(/\./g,"\\\\.");
-						searchKey = searchKey.replace(/\?/g,"\\\\?");
-						searchKey = searchKey.replace(/\[/g,"\\\\[");
-						searchKey = searchKey.replace(/\]/g,"\\\\]");
-						searchKey = searchKey.replace(/\(/g,"\\\\(");
-						searchKey = searchKey.replace(/\)/g,"\\\\)");
-						searchKey = searchKey.replace(/\{/g,"\\\\{");
-						searchKey = searchKey.replace(/\}/g,"\\\\}");
-						searchKey = searchKey.replace(/\^/g,"\\\\^");
-						searchKey = searchKey.replace(/\$/g,"\\\\$");
+						searchKey = searchKey.replace(/\|/g,"\\\|");
+						searchKey = searchKey.replace(/\*/g,"\\\*");
+						searchKey = searchKey.replace(/\./g,"\\\.");
+						searchKey = searchKey.replace(/\?/g,"\\\?");
+						searchKey = searchKey.replace(/\[/g,"\\\[");
+						searchKey = searchKey.replace(/\]/g,"\\\]");
+						searchKey = searchKey.replace(/\(/g,"\\\(");
+						searchKey = searchKey.replace(/\)/g,"\\\)");
+						searchKey = searchKey.replace(/\{/g,"\\\{");
+						searchKey = searchKey.replace(/\}/g,"\\\}");
+						searchKey = searchKey.replace(/\^/g,"\\\^");
+						searchKey = searchKey.replace(/\$/g,"\\\$");
 				}
 				namespace=Array.clone(namespace);
 				namespace.pop();
@@ -357,9 +356,15 @@ var MooContentAssist = new Class({
 			"keyup": function(ev){
 				this._setSourceCaretPosition();
 				if (this.getAssistWindow()!=null||this.options.aggressiveAssist) {
+					
+					/*
+					if (ev.key.length == 1 && (ev.key.test(/^\w$/) || ev.key == '{' || ev.key == '[')) {
+						this.fireEvent("start",this);
+					}
+					*/	
 					if(ev.key.length == 1 && ev.key.test(/^\w$/)) {
 						this.fireEvent("start",this);
-					}	
+					}
 				}
 			}.bind(this),
 			"keypress": that._setSourceCaretPosition.bind(this),
@@ -382,7 +387,6 @@ var MooContentAssist = new Class({
 		if (typeOf(caretPosition)!="number") {
 			caretPosition=this.getSourceCaretPosition();
 		}
-		console.log("nameSpaceString","|"+nameSpaceString+"|","caretPosition",caretPosition);
 		var namespace = [];
 		var allowed  = this.options.namespaceAllowed;
 		
@@ -468,7 +472,6 @@ var MooContentAssist = new Class({
 		}
 		return namespace;	
 		/* parser end */
-		
 	},
 	_setItemSelected: function(item, executeScroll) {
 		if (item!=null) {

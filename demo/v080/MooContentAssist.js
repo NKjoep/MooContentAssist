@@ -29,7 +29,8 @@ provides: [MooContentAssist]
 
     Changelog:
     
-08 Mar 2011 v.081 - configurable items container inside the main box
+08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or string) in the namespace
+08 Mar 2011 v.080.1 - configurable items container inside the main box
 06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
 27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
@@ -48,11 +49,11 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - 0.80
-		Date - 06 Mar 2011
+		Version - v.080.2
+		Date - 14 Mar 2011
 */
 var MooContentAssist = new Class({
-	version: "MooContentAssist v0.80",
+	version: "MooContentAssist v0.80.2",
 	Implements: [Events, Options],
 	options: {
 		source: null,
@@ -67,7 +68,7 @@ var MooContentAssist = new Class({
 		itemType: "li",
 		itemsContainerType: "ul",
 		aggressiveAssist: true,
-		namespaceDelimiters: [" ","\n","\t","\"",",",";","=","(",")","[","]",";","{","}","<",">","+","-",'\\',"!","&","|"],
+		namespaceAllowed: ["()", "$"],
 		css : {
 			item: "item",
 			itemsContainer: "itemsContainer",
@@ -355,9 +356,15 @@ var MooContentAssist = new Class({
 			"keyup": function(ev){
 				this._setSourceCaretPosition();
 				if (this.getAssistWindow()!=null||this.options.aggressiveAssist) {
+					
+					/*
+					if (ev.key.length == 1 && (ev.key.test(/^\w$/) || ev.key == '{' || ev.key == '[')) {
+						this.fireEvent("start",this);
+					}
+					*/	
 					if(ev.key.length == 1 && ev.key.test(/^\w$/)) {
 						this.fireEvent("start",this);
-					}	
+					}
 				}
 			}.bind(this),
 			"keypress": that._setSourceCaretPosition.bind(this),
@@ -375,47 +382,96 @@ var MooContentAssist = new Class({
 		var merged = vocabulary.combine(vocabularyToInclude).sort();
 		return merged;
 	},
-	_namespaceParser: function(nameSpaceString,caretPosition,namespaceDelimiters) {
+	_namespaceParser: function(nameSpaceString,caretPosition) {
 		if (nameSpaceString==undefined) { nameSpaceString=this.getSourceValue(); }
-			var namespace = null;
-			if (typeOf(caretPosition)!="number") {
-				caretPosition=this.getSourceCaretPosition();
+		if (typeOf(caretPosition)!="number") {
+			caretPosition=this.getSourceCaretPosition();
+		}
+		var namespace = [];
+		var allowed  = this.options.namespaceAllowed;
+		
+		/* parser start */
+		var positionStart = 0;
+		for (var i=caretPosition-1;i>0;--i) {
+			var character = nameSpaceString[i];
+			var previousCharacter = nameSpaceString[i+1];
+			if (character===undefined) {
+				break;
 			}
-			if (typeOf(namespaceDelimiters)!="array") {
-				namespaceDelimiters=this.options.namespaceDelimiters;
+			if (character=="." && previousCharacter==".") {
+				positionStart = i+1+1; 
+				break; 
 			}
-			var endPosition = caretPosition;
-			var position=endPosition-1;
-			var test = true;
-			var previousChar = "";
-			while(position >= 0 && test) {
-				var c = nameSpaceString.substring(position,position+1);
-				if (namespaceDelimiters.contains(c)) { 
-					test = false;
+			var cursorJump = 0;
+			var endsWithAllowed = allowed.some(function(item) {
+				if (item.length==1) {
+					return character==item;
 				}
-				else {
-					if (previousChar=="" && c=="") {
-						test = false;
-						position = position+1;
+				else if (nameSpaceString.substring(i-item.length+1,i+1)==item) {
+					//cursorJump = item.length+1;
+					cursorJump = item.length-1;
+					return true;
+				}
+				else if (nameSpaceString.substring(i,i+item.length)==item) {
+					return true;
+				}
+			});
+			if (cursorJump>0) {
+				i = i-cursorJump;
+				character=nameSpaceString[i];
+				previousCharacter=nameSpaceString[i+1];
+				continue;
+			}
+			if ( character!="." && !(character.test(/^\w$/) || endsWithAllowed ) ) {
+				positionStart = i+1;
+				if (previousCharacter!==undefined) {
+					var jumpPrevious = 0;
+					if (previousCharacter==".") {
+						//if theres a dot ".", just move forward of 1 position and exit the loop.
+						jumpPrevious = 1;
+						positionStart = i+1+jumpPrevious;
+						break;
 					}
-					else {
-						previousChar = c;
-						position = position-1;
+					var previousCharacterEndsWithAllowed = allowed.some(function(item) {
+						if (item.length==1) {
+							if (previousCharacter==item) {
+								jumpPrevious=1;
+								return true;	
+							}
+						} 
+						//forward seek
+						else if (nameSpaceString.substring(i,i+item.length) == item ) {
+							jumpPrevious=item.length;
+							return true;
+						}
+						//back seek
+						else if (nameSpaceString.substring(i-item.length+1,i+1) == item) {
+							jumpPrevious= (-(item.length));
+							return true;
+						}
+					});
+					if (!previousCharacterEndsWithAllowed && !previousCharacter.test(/^\w$/)) { 
+						positionStart = i+1+jumpPrevious;
 					}
 				}
+				break;
 			}
-			var namespaceFlat = nameSpaceString.substring(position+1,endPosition).trim();
-			if (namespaceFlat.length > 0 && namespaceFlat != ".") {
-				namespace = namespaceFlat.split(".");
-				if (namespace[namespace.length-1] == "") namespace[namespace.length-1] = "/"; 
+		}
+		if(positionStart>caretPosition) {
+			positionStart=caretPosition;
+		}
+		nameSpaceString = nameSpaceString.substring(positionStart,caretPosition).trim();
+		if (nameSpaceString.length>0) {
+			namespace=nameSpaceString.split(".");
+			if (namespace[namespace.length-1]=="") {
+				namespace[namespace.length-1] = "/";
 			}
-			else if (namespaceFlat.length == 1 && namespaceFlat == ".") {
-				namespace = ["/"];
-			}
-			else if (namespaceFlat.length == 0 && namespaceFlat == "") {
-				namespace = ["/"];
-			}
-			return namespace;
+		}
+		else {
+			namespace=["/"];
+		}
+		return namespace;	
+		/* parser end */
 	},
 	_setItemSelected: function(item, executeScroll) {
 		if (item!=null) {
@@ -493,7 +549,6 @@ var MooContentAssist = new Class({
 				"class": this.options.css.itemsContainer
 			}).inject(w,"bottom");
 		}
-		
 		return w;
 	},
 	end: function() {
@@ -510,7 +565,7 @@ var MooContentAssist = new Class({
 		var w = this.getAssistWindow();
 		var item = null;
 		if (w!=null) {
-			item = w.getElement(this._itemSelectedSelector);
+			item = w.getElement(this._prefixItemsSelector+this.options.css.itemSelected);
 		}
 		return item;
 	},
@@ -540,17 +595,18 @@ var MooContentAssist = new Class({
 		if(this.getAssistWindow()!=null) this.getAssistWindow().dissolve();
 		this.fireEvent("hide");
 	},
-	initialize: function(options) {
-		this.setOptions(options);
-		if (options.itemsContainer==null) {
-			this.options.itemsContainer=null;
+	initialize: function(opt) {
+		this.setOptions(opt);
+		if (opt.itemsContainerType===null) {
+			this.options.itemsContainerType = null;
+			this._prefixItemsSelector=".";
+		}
+		else {
+			this._prefixItemsSelector="."+this.options.css.itemsContainer+" .";
 		}
 		this.options.source.store("MooContentAssist",null);
 		this._eventManager();
 		this.oldNamespace=false;
-		this._itemsSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.item;
-		this._itemSelectedSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.itemSelected;
-		this._messageSelector = (this.options.itemsContainerType!=null?this.options.itemsContainerType+" .":".")+this.options.css.messageItem;
 	},
 	scrollToItem: function(item) {
 		var w = this.getAssistWindow();
@@ -568,7 +624,7 @@ var MooContentAssist = new Class({
 		    //box height
 		    var f = (w.getComputedSize({"styles": ["padding"]}).totalHeight/i).toInt();
 		    //children
-		    var children = w.getElements(this._itemsSelector);
+		    var children = w.getElements(this._prefixItemsSelector+this.options.css.item);
 		    //current item
 		    var c = children.indexOf(item);
 		    //index
@@ -592,25 +648,33 @@ var MooContentAssist = new Class({
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
 		if (currentItem!=null) {
-			prevItem = currentItem.getNext(this._itemsSelector);
+			prevItem = currentItem.getNext();
 		}
 		else {
-			prevItem = this.getAssistWindow().getFirst(this._itemsSelector);
+			prevItem = this.getAssistWindow().getFirst(this._prefixItemsSelector+this.options.css.item);
 		}
-		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getFirst(this._itemsSelector)); }	
+		if (prevItem != null) { 
+			this._setItemSelected(prevItem); 
+		}
+		else { 
+			this._setItemSelected(this.getAssistWindow().getFirst(this._prefixItemsSelector+this.options.css.item)); 
+		}	
 	},
 	selectItemUp: function() {
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
 		if (currentItem!=null) {
-			prevItem = currentItem.getPrevious(this._itemsSelector);
+			prevItem = currentItem.getPrevious();
 		}
 		else {
-			prevItem = this.getAssistWindow().getLast(this._itemsSelector);
+			prevItem = this.getAssistWindow().getLast(this._prefixItemsSelector+this.options.css.item);
 		}
-		if (prevItem != null) { this._setItemSelected(prevItem); }
-		else { this._setItemSelected(this.getAssistWindow().getLast(this._itemsSelector)); }
+		if (prevItem != null) { 
+			this._setItemSelected(prevItem); 
+		}
+		else { 
+			this._setItemSelected(this.getAssistWindow().getLast(this._prefixItemsSelector+this.options.css.item));
+		}
 	},
 	setAggressiveAssist: function(aggressiveStatus) {
 		if (typeOf(aggressiveStatus)=="boolean"){
@@ -622,7 +686,7 @@ var MooContentAssist = new Class({
 		if (w!=null) {
 			vocabulary = Array.from(vocabulary);
 
-			var injectBindElement = this.options.itemsContainer==null? w : w.getElement(this.options.itemsContainer);
+			var injectBindElement = this.options.itemsContainerType==null? w : w.getElement("."+this.options.css.itemsContainer);
 			var inject = function(word) {
 				word.inject(this);
 			}.bind(injectBindElement);
@@ -636,18 +700,18 @@ var MooContentAssist = new Class({
 	},
 	setFrameSize: function(size) {
 		if(typeOf(size) != "number") { size = this.options.frameSize; }
-		var selector = this._itemsSelector;
+		var selector = this._prefixItemsSelector+this.options.css.item;
 		var w = this.getAssistWindow();
 		var children = w.getElements(selector);
 		var childrenLength = children.length > 0 ? children.length : 1;
 		if (childrenLength<size) { size = childrenLength;}
 		var exampleItem = w.getElement(selector);
-		if (exampleItem==null) exampleItem = w.getElement(this._messageSelector);
-		if (exampleItem!= null) {
-			w.setStyle("height",(exampleItem.getComputedSize({
-				"styles": ["padding","margin","border"]
-			}).totalHeight * size) + "px"); 
+		if (exampleItem==null) {
+			exampleItem = w.getElement(this._prefixItemsSelector+this.options.css.messageItem);
 		}
+		w.setStyle("height",(exampleItem.getComputedSize({
+			"styles": ["padding","margin","border"]
+		}).totalHeight * size) + "px");
 	},
 	show: function() {
 		if(this.getAssistWindow()!=null) this.getAssistWindow().reveal();
