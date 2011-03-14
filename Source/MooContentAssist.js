@@ -233,7 +233,7 @@ var MooContentAssist = new Class({
 				else if (namespace==item) {
 					check = false;
 				}
-				else if (item.substring(0,(namespace.length)).toLowerCase() == namespace)  {
+				else if (item.substring(0,namespace.length).toLowerCase() == namespace.toLowerCase())  {
 					check = true;
 				}
 				return check;
@@ -264,57 +264,57 @@ var MooContentAssist = new Class({
 	        events: {
 	            "alt+space": function(ev){
 					if (this.getAssistWindow()!=null) {
-						//console.log("already assisting!");
+						//("already assisting!");
 						ev.preventDefault();
 					}
 					else {
-						//console.log("start assist");
+						//("start assist");
 		                ev.preventDefault();
 						this.fireEvent("start",this);
 					}
 	            }.bind(this),
 	            "control+space": function(ev){
-					//console.log("already assisting!");
+					//("already assisting!");
 					if (this.getAssistWindow()!=null) {
 						ev.preventDefault();
 						this.fireEvent("start",this);
 					}
 					else {
-		                //console.log("start assist");
+		                //("start assist");
 		                ev.preventDefault();
 						this.fireEvent("start",this);
 					}
 	          	}.bind(this),
 				"up": function(ev) {
-					//console.log("select item up");
+					//("select item up");
 					if (this.getAssistWindow()!=null) {
 						ev.preventDefault();
 						this.selectItemUp();
 					}
 				}.bind(this),
 				"down": function(ev) {
-					//console.log("select item down");
+					//("select item down");
 					if (this.getAssistWindow()!=null) {
 						ev.preventDefault();
 						this.selectItemDown();
 					}
 				}.bind(this),
 				"esc": function(ev) {
-					//console.log("close it!");
+					//("close it!");
 					if (this.getAssistWindow()!=null) {
 						ev.preventDefault();
 						this.fireEvent("end",this);
 					}
 				}.bind(this),
 				"tab": function(ev) {
-					//console.log("close it!");
+					//("close it!");
 					if (this.getAssistWindow()!=null) {
 						ev.preventDefault();
 						this.fireEvent("end",this);
 					}
 				}.bind(this),
 				"enter": function(ev) {
-					//console.log("use the item! and destroy it!");
+					//("use the item! and destroy it!");
 					if(this.getAssistWindow()!=null && this.getItemSelected()!=null) {
 						ev.preventDefault();
 						this._useItemSelected();
@@ -735,10 +735,9 @@ var MooContentAssist = new Class({
 		}
 		if (vocabulary.length > 0) {
 			var renderedVocabulary = [];
-			for (var i = 0;i<vocabulary.length;i++) {
-				var word = vocabulary[i];
+			vocabulary.each(function(word) {
 				renderedVocabulary.push(this.getRenderedWord(word));
-			}
+			}.bind(this));
 			if (mca == null) {
 				mca = this.createAssistWindow();
 			}
