@@ -356,13 +356,8 @@ var MooContentAssist = new Class({
 			"keyup": function(ev){
 				this._setSourceCaretPosition();
 				if (this.getAssistWindow()!=null||this.options.aggressiveAssist) {
-					
-					/*
-					if (ev.key.length == 1 && (ev.key.test(/^\w$/) || ev.key == '{' || ev.key == '[')) {
-						this.fireEvent("start",this);
-					}
-					*/	
-					if(ev.key.length == 1 && ev.key.test(/^\w$/)) {
+					//removed control, for strange behaviour when selecting all with control+a
+					if(!ev.control && ev.key.length == 1 && ev.key.test(/^\w$/)) {
 						this.fireEvent("start",this);
 					}
 				}
@@ -470,6 +465,7 @@ var MooContentAssist = new Class({
 		else {
 			namespace=["/"];
 		}
+		console.log("ns",namespace);
 		return namespace;	
 		/* parser end */
 	},
