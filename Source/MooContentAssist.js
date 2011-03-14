@@ -67,7 +67,7 @@ var MooContentAssist = new Class({
 		itemType: "li",
 		itemsContainerType: "ul",
 		aggressiveAssist: true,
-		namespaceDelimiters: [" ","\n","\t","\"",",",";","=","(",")","[","]",";","{","}","<",">","+","-",'\\',"!","&","|"],
+		namespaceAllowed: ["()", "$", "(\"\")"],
 		css : {
 			item: "item",
 			itemsContainer: "itemsContainer",
@@ -88,6 +88,7 @@ var MooContentAssist = new Class({
 				namespace=Array.clone(namespace);
 				namespace.shift(); 
 			}
+			console.log("input ns",namespace);
 			var vocabularyFound = [];
 			var found = null;
 			var searchKey = null;
@@ -95,34 +96,34 @@ var MooContentAssist = new Class({
 				found = vocabulary; 
 				if (namespace[0] != "/") {
 					searchKey = namespace[0];
-						searchKey = searchKey.replace(/\*/g,"\\\*");
-						searchKey = searchKey.replace(/\./g,"\\\.");
-						searchKey = searchKey.replace(/\?/g,"\\\?");
-						searchKey = searchKey.replace(/\[/g,"\\\[");
-						searchKey = searchKey.replace(/\]/g,"\\\]");
-						searchKey = searchKey.replace(/\(/g,"\\\(");
-						searchKey = searchKey.replace(/\)/g,"\\\)");
-						searchKey = searchKey.replace(/\{/g,"\\\{");
-						searchKey = searchKey.replace(/\}/g,"\\\}");
-						searchKey = searchKey.replace(/\^/g,"\\\^");
-						searchKey = searchKey.replace(/\$/g,"\\\$");
+						searchKey = searchKey.replace(/\*/g,"\\\\*");
+						searchKey = searchKey.replace(/\./g,"\\\\.");
+						searchKey = searchKey.replace(/\?/g,"\\\\?");
+						searchKey = searchKey.replace(/\[/g,"\\\\[");
+						searchKey = searchKey.replace(/\]/g,"\\\\]");
+						searchKey = searchKey.replace(/\(/g,"\\\\(");
+						searchKey = searchKey.replace(/\)/g,"\\\\)");
+						searchKey = searchKey.replace(/\{/g,"\\\\{");
+						searchKey = searchKey.replace(/\}/g,"\\\\}");
+						searchKey = searchKey.replace(/\^/g,"\\\\^");
+						searchKey = searchKey.replace(/\$/g,"\\\\$");
 				}
 			}
 			else if (namespace.length > 1) {
 				if (namespace[namespace.length-1] != "/") {
 					searchKey = namespace[namespace.length-1];
-						searchKey = searchKey.replace(/\|/g,"\\\|");
-						searchKey = searchKey.replace(/\*/g,"\\\*");
-						searchKey = searchKey.replace(/\./g,"\\\.");
-						searchKey = searchKey.replace(/\?/g,"\\\?");
-						searchKey = searchKey.replace(/\[/g,"\\\[");
-						searchKey = searchKey.replace(/\]/g,"\\\]");
-						searchKey = searchKey.replace(/\(/g,"\\\(");
-						searchKey = searchKey.replace(/\)/g,"\\\)");
-						searchKey = searchKey.replace(/\{/g,"\\\{");
-						searchKey = searchKey.replace(/\}/g,"\\\}");
-						searchKey = searchKey.replace(/\^/g,"\\\^");
-						searchKey = searchKey.replace(/\$/g,"\\\$");
+						searchKey = searchKey.replace(/\|/g,"\\\\|");
+						searchKey = searchKey.replace(/\*/g,"\\\\*");
+						searchKey = searchKey.replace(/\./g,"\\\\.");
+						searchKey = searchKey.replace(/\?/g,"\\\\?");
+						searchKey = searchKey.replace(/\[/g,"\\\\[");
+						searchKey = searchKey.replace(/\]/g,"\\\\]");
+						searchKey = searchKey.replace(/\(/g,"\\\\(");
+						searchKey = searchKey.replace(/\)/g,"\\\\)");
+						searchKey = searchKey.replace(/\{/g,"\\\\{");
+						searchKey = searchKey.replace(/\}/g,"\\\\}");
+						searchKey = searchKey.replace(/\^/g,"\\\\^");
+						searchKey = searchKey.replace(/\$/g,"\\\\$");
 				}
 				namespace=Array.clone(namespace);
 				namespace.pop();
@@ -375,62 +376,98 @@ var MooContentAssist = new Class({
 		var merged = vocabulary.combine(vocabularyToInclude).sort();
 		return merged;
 	},
-	_namespaceParser: function(nameSpaceString,caretPosition,namespaceDelimiters) {
+	_namespaceParser: function(nameSpaceString,caretPosition) {
 		if (nameSpaceString==undefined) { nameSpaceString=this.getSourceValue(); }
-			var namespace = null;
-			if (typeOf(caretPosition)!="number") {
-				caretPosition=this.getSourceCaretPosition();
+		if (typeOf(caretPosition)!="number") {
+			caretPosition=this.getSourceCaretPosition();
+		}
+		console.log("nameSpaceString","|"+nameSpaceString+"|","caretPosition",caretPosition);
+		var namespace = [];
+		var allowed  = this.options.namespaceAllowed;
+		
+		/* parser start */
+		var positionStart = 0;
+		for (var i=caretPosition-1;i>0;--i) {
+			var character = nameSpaceString[i];
+			var previousCharacter = nameSpaceString[i+1];
+			if (character===undefined) {
+				break;
 			}
-			if (typeOf(namespaceDelimiters)!="array") {
-				namespaceDelimiters=this.options.namespaceDelimiters;
+			if (character=="." && previousCharacter==".") {
+				positionStart = i+1+1; 
+				break; 
 			}
-			var endPosition = caretPosition;
-			var position=endPosition-1;
-			var test=true;
-			var previousChar="";
-			while(position >= 0 && test) {
-				var c = nameSpaceString.substring(position,position+1);
-				if (namespaceDelimiters.contains(c)) {
-					test = false;
+			var cursorJump = 0;
+			var endsWithAllowed = allowed.some(function(item) {
+				if (item.length==1) {
+					return character==item;
 				}
-				else {
-					if (previousChar=="" && c=="") {
-						test = false;
-						position = position+1;
+				else if (nameSpaceString.substring(i-item.length+1,i+1)==item) {
+					//cursorJump = item.length+1;
+					cursorJump = item.length-1;
+					return true;
+				}
+				else if (nameSpaceString.substring(i,i+item.length)==item) {
+					return true;
+				}
+			});
+			if (cursorJump>0) {
+				i = i-cursorJump;
+				character=nameSpaceString[i];
+				previousCharacter=nameSpaceString[i+1];
+				continue;
+			}
+			if ( character!="." && !(character.test(/^\w$/) || endsWithAllowed ) ) {
+				positionStart = i+1;
+				if (previousCharacter!==undefined) {
+					var jumpPrevious = 0;
+					if (previousCharacter==".") {
+						//if theres a dot ".", just move forward of 1 position and exit the loop.
+						jumpPrevious = 1;
+						positionStart = i+1+jumpPrevious;
+						break;
 					}
-					else {
-						previousChar = c;
-						position = position-1;
+					var previousCharacterEndsWithAllowed = allowed.some(function(item) {
+						if (item.length==1) {
+							if (previousCharacter==item) {
+								jumpPrevious=1;
+								return true;	
+							}
+						} 
+						//forward seek
+						else if (nameSpaceString.substring(i,i+item.length) == item ) {
+							jumpPrevious=item.length;
+							return true;
+						}
+						//back seek
+						else if (nameSpaceString.substring(i-item.length+1,i+1) == item) {
+							jumpPrevious= (-(item.length));
+							return true;
+						}
+					});
+					if (!previousCharacterEndsWithAllowed && !previousCharacter.test(/^\w$/)) { 
+						positionStart = i+1+jumpPrevious;
 					}
 				}
+				break;
 			}
-			var namespaceFlat = nameSpaceString.substring(position+1,endPosition).trim();
-			if (namespaceFlat.length > 0 && namespaceFlat != ".") {
-				namespace = namespaceFlat.split(".");
-				if (namespace[namespace.length - 1] == "") {
-					namespace[namespace.length-1] = "/";
-				} 
-				var indexEmpty = null;
-				var itemAllLengthGreatherThan0 = namespace.every(function(item,index){
-					if (item.length==0) {
-						indexEmpty = index;
-						return false;
-					}
-					else if (item.length>0) {
-						return true;
-					} 
-				});
-				if (!itemAllLengthGreatherThan0) {
-					namespace = namespace.slice(indexEmpty+1);					
-				}
+		}
+		if(positionStart>caretPosition) {
+			positionStart=caretPosition;
+		}
+		nameSpaceString = nameSpaceString.substring(positionStart,caretPosition).trim();
+		if (nameSpaceString.length>0) {
+			namespace=nameSpaceString.split(".");
+			if (namespace[namespace.length-1]=="") {
+				namespace[namespace.length-1] = "/";
 			}
-			else if (namespaceFlat.length == 1 && namespaceFlat == ".") {
-				namespace = ["/"];
-			}
-			else if (namespaceFlat.length == 0 && namespaceFlat == "") {
-				namespace = ["/"];
-			}
-			return namespace;
+		}
+		else {
+			namespace=["/"];
+		}
+		return namespace;	
+		/* parser end */
+		
 	},
 	_setItemSelected: function(item, executeScroll) {
 		if (item!=null) {
