@@ -465,7 +465,6 @@ var MooContentAssist = new Class({
 		else {
 			namespace=["/"];
 		}
-		console.log("ns",namespace);
 		return namespace;	
 		/* parser end */
 	},
