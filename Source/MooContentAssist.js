@@ -29,6 +29,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
+08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or string) in the namespace
 08 Mar 2011 v.080.1 - configurable items container inside the main box
 06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
@@ -48,11 +49,11 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - v.080.1
-		Date - 08 Mar 2011
+		Version - v.080.2
+		Date - 14 Mar 2011
 */
 var MooContentAssist = new Class({
-	version: "MooContentAssist v0.80.1",
+	version: "MooContentAssist v0.80.2",
 	Implements: [Events, Options],
 	options: {
 		source: null,
