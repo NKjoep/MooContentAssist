@@ -1,3 +1,4 @@
+/*globals Events: false, Options: false, MooTools: false, Class: false, Element: false, typeOf: false, instanceOf: false, Fx: false, Slick: false, Type: false, Chain: false, Elements: false, Document: false, Event: false, Window: false, Browser: false , Request: false, Keyboard: false */
 /*
 ---
 
@@ -29,7 +30,7 @@ provides: [MooContentAssist]
 
     Changelog:
     
-08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or string) in the namespace
+08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or strings) in the namespace
 08 Mar 2011 v.080.1 - configurable items container inside the main box
 06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
@@ -67,21 +68,29 @@ var MooContentAssist = new Class({
 		windowPadding: {x: 0, y: 5},
 		itemType: "li",
 		itemsContainerType: "ul",
+		matchedTextItemType: "span",
 		aggressiveAssist: true,
 		namespaceAllowed: ["()", "$"],
 		css : {
 			item: "item",
 			itemsContainer: "itemsContainer",
 			itemSelected: "itemSelected",
-			messageItem: "message" 
+			messageItem: "message",
+			matchedText: "matched"
 		},
 		labels: {
 			nothingFound: "Nothing was found.",
 			ajaxError: "Error while retrieving data."
 		},
 		vocabularyManager_Render: function(obj) {
-			var rendered = new Element(this.options.itemType,{text: obj, "class": this.options.css.item});
+			var ns = this.getNameSpace().getLast();
+			var rendered = new Element(this.options.itemType,{"class": this.options.css.item});
 			rendered.store("value",obj);
+			if (ns!="/") {
+				new Element(this.options.matchedTextItemType,{text: obj.substring(0,ns.length), "class": this.options.css.matchedText}).inject(rendered);
+				obj=obj.substring(ns.length);
+			}
+			rendered.appendText(obj);						
 			return rendered; 
 		},
 		vocabularyManager_Extract: function(namespace,vocabulary) {
@@ -138,10 +147,10 @@ var MooContentAssist = new Class({
 				}
 				found = tempFound;
 			}
-			if (null != found) {
+			if (null !== found) {
 				if(typeOf(found)=="object") {
 					Object.each(found,function(value,key){
-						if (searchKey == null || key.test("^"+searchKey,"i")) {
+						if (searchKey === null || key.test("^"+searchKey,"i")) {
 							vocabularyFound.push(key);
 						}
 					});
@@ -151,7 +160,7 @@ var MooContentAssist = new Class({
 						if(typeOf(item)=="string" || typeOf(item)=="number") {
 							item = item.toString();
 							if (item.length>0) {
-								if (searchKey == null || item.test("^"+searchKey,"i")) {
+								if (searchKey === null || item.test("^"+searchKey,"i")) {
 									vocabularyFound.push(item.toString());
 								}	
 							}
@@ -168,7 +177,7 @@ var MooContentAssist = new Class({
 			var extractedVocabulary = null;
 			if (typeOf(this.options.vocabularyUrl)=="string") {
 				var namespaceData = this.options.vocabularyUrlParam+"="+currentNamespace.join("."); 
-				if (this.vocabularyRequest==undefined) {
+				if (this.vocabularyRequest===undefined) {
 					this.vocabularyRequest = new Request.JSON({
 						secure: true,
 						url: this.options.vocabularyUrl,
@@ -204,7 +213,7 @@ var MooContentAssist = new Class({
 		var t = target;
 		var s = this.options.source;
 		var assistWindow = this.getAssistWindow();
-		var checkA = (assistWindow!=null) && (t == assistWindow || assistWindow.contains(t)); 
+		var checkA = (assistWindow!==null) && (t == assistWindow || assistWindow.contains(t)); 
 		var checkB = (t == s || s.contains(t));
 		if (t==window) return false;
 		else if (checkA || checkB) return true;
@@ -213,11 +222,11 @@ var MooContentAssist = new Class({
 		}
 	},
 	_createMessage: function(text) {
-		var m =	messageEl = new Element(this.options.itemType, {
+		var messageEl = new Element(this.options.itemType, {
 			"class": this.options.css.messageItem,
 			"text": text
 		});
-		return m;
+		return messageEl;
 	},
 	_discoverUserVocabulary: function(namespace) {
 		var found = [];
@@ -251,8 +260,7 @@ var MooContentAssist = new Class({
 			}
 		});
 		str = tmp;
-		//str = str.clean().unique();
-    	return str;
+		return str;
     },
 	_eventManager: function() {
 		this.addEvents({
@@ -263,7 +271,7 @@ var MooContentAssist = new Class({
 	        active: false,
 	        events: {
 	            "alt+space": function(ev){
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						//("already assisting!");
 						ev.preventDefault();
 					}
@@ -275,7 +283,7 @@ var MooContentAssist = new Class({
 	            }.bind(this),
 	            "control+space": function(ev){
 					//("already assisting!");
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						ev.preventDefault();
 						this.fireEvent("start",this);
 					}
@@ -284,55 +292,55 @@ var MooContentAssist = new Class({
 		                ev.preventDefault();
 						this.fireEvent("start",this);
 					}
-	          	}.bind(this),
+				}.bind(this),
 				"up": function(ev) {
 					//("select item up");
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						ev.preventDefault();
 						this.selectItemUp();
 					}
 				}.bind(this),
 				"down": function(ev) {
 					//("select item down");
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						ev.preventDefault();
 						this.selectItemDown();
 					}
 				}.bind(this),
 				"esc": function(ev) {
 					//("close it!");
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						ev.preventDefault();
 						this.fireEvent("end",this);
 					}
 				}.bind(this),
 				"tab": function(ev) {
 					//("close it!");
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						ev.preventDefault();
 						this.fireEvent("end",this);
 					}
 				}.bind(this),
 				"enter": function(ev) {
 					//("use the item! and destroy it!");
-					if(this.getAssistWindow()!=null && this.getItemSelected()!=null) {
+					if(this.getAssistWindow()!==null && this.getItemSelected()!==null) {
 						ev.preventDefault();
 						this._useItemSelected();
 						this.fireEvent("end",this);
 					}
 				}.bind(this),
 				"keyup:delete": function(ev){ 
-					if(this.getAssistWindow()!=null) {
+					if(this.getAssistWindow()!==null) {
 						this.fireEvent("start",this); 
 					}
 				}.bind(this),
 				"keyup:cancel": function(ev){ 
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						this.fireEvent("start",this); 
 					}
 				}.bind(this),
 				"keyup:backspace": function(ev){ 
-					if (this.getAssistWindow()!=null) {
+					if (this.getAssistWindow()!==null) {
 						this.fireEvent("start",this);
 					}
 				}.bind(this),
@@ -355,7 +363,7 @@ var MooContentAssist = new Class({
 			}.bind([myKeyboardEvents,this]),
 			"keyup": function(ev){
 				this._setSourceCaretPosition();
-				if (this.getAssistWindow()!=null||this.options.aggressiveAssist) {
+				if (this.getAssistWindow()!==null||this.options.aggressiveAssist) {
 					//removed control, for strange behaviour when selecting all with control+a
 					if(!ev.control && ev.key.length == 1 && ev.key.test(/^\w$/)) {
 						this.fireEvent("start",this);
@@ -378,7 +386,7 @@ var MooContentAssist = new Class({
 		return merged;
 	},
 	_namespaceParser: function(nameSpaceString,caretPosition) {
-		if (nameSpaceString==undefined) { nameSpaceString=this.getSourceValue(); }
+		if (nameSpaceString===undefined) { nameSpaceString=this.getSourceValue(); }
 		if (typeOf(caretPosition)!="number") {
 			caretPosition=this.getSourceCaretPosition();
 		}
@@ -458,7 +466,7 @@ var MooContentAssist = new Class({
 		nameSpaceString = nameSpaceString.substring(positionStart,caretPosition).trim();
 		if (nameSpaceString.length>0) {
 			namespace=nameSpaceString.split(".");
-			if (namespace[namespace.length-1]=="") {
+			if (namespace[namespace.length-1]==="") {
 				namespace[namespace.length-1] = "/";
 			}
 		}
@@ -469,12 +477,12 @@ var MooContentAssist = new Class({
 		/* parser end */
 	},
 	_setItemSelected: function(item, executeScroll) {
-		if (item!=null) {
+		if (item!==null) {
 			var oldItem = this.getItemSelected();
-			if (oldItem!=null) { oldItem.removeClass(this.options.css.itemSelected); }
+			if (oldItem!==null) { oldItem.removeClass(this.options.css.itemSelected); }
 			item.addClass(this.options.css.itemSelected);
 			this.fireEvent("selectItem",item);
-			if (executeScroll != false) {
+			if (executeScroll !== false) {
 				this.scrollToItem(item);
 			}
 		}
@@ -485,12 +493,13 @@ var MooContentAssist = new Class({
 	_useItemSelected: function() {
 		var text = this.getItemSelected();
 		var w = this.getAssistWindow();
-		if (text!=null && w!=null) {
+		if (text!==null && w!==null) {
 			text = text.retrieve("value");
 			var textarea = this.options.source;
 			var scrollTop = textarea.scrollTop;
 			var position = this.getSourceCaretPosition();
 			var namespace = this.getNameSpace().getLast();
+			var completedText=null;
 			if (namespace=="/") {
 				completedText=text;
 			}
@@ -523,7 +532,16 @@ var MooContentAssist = new Class({
 			itemsEventsObj['mouseover:relay(.'+this.options.css.item+')'] = function(ev){ 
 				ev.stopPropagation();
 				ev.preventDefault();
-				this._setItemSelected(ev.target,false);
+				if (ev.target.get("tag")==this.options.itemType&&ev.target.hasClass(this.options.css.item)) {
+					this._setItemSelected(ev.target,false);
+				}
+				else {
+					var parent = ev.target.getParent(this.options.itemType+"."+this.options.css.item);
+					if (parent!==null) {
+						this._setItemSelected(parent,false);
+					}
+					
+				}
 			}.bind(this);
 		w.addEvents(itemsEventsObj);
 		var sourceEl = this.options.source;
@@ -539,7 +557,7 @@ var MooContentAssist = new Class({
 			"top": top
 		});
 		
-		if (this.options.itemsContainerType!=null) {
+		if (this.options.itemsContainerType!==null) {
 			new Element(this.options.itemsContainerType, {
 				"class": this.options.css.itemsContainer
 			}).inject(w,"bottom");
@@ -548,7 +566,7 @@ var MooContentAssist = new Class({
 	},
 	end: function() {
 		var mca = this.getAssistWindow();
-		if (mca != null) {
+		if (mca !== null) {
 			mca.destroy();
 			this.options.source.store("MooContentAssist",null);
 		}
@@ -559,7 +577,7 @@ var MooContentAssist = new Class({
 	getItemSelected: function() {
 		var w = this.getAssistWindow();
 		var item = null;
-		if (w!=null) {
+		if (w!==null) {
 			item = w.getElement(this._prefixItemsSelector+this.options.css.itemSelected);
 		}
 		return item;
@@ -574,7 +592,7 @@ var MooContentAssist = new Class({
 	},
 	getSourceCaretPosition: function() {
 		var pos = this.options.source.retrieve("MooContentAssist-CaretPosition");
-		if (pos == null) {
+		if (pos === null) {
 			pos = this.options.source.getCaretPosition();
 		}
 		return pos;
@@ -587,7 +605,7 @@ var MooContentAssist = new Class({
 		return extractedVocabulary;
 	},
 	hide: function() {
-		if(this.getAssistWindow()!=null) this.getAssistWindow().dissolve();
+		if(this.getAssistWindow()!==null) this.getAssistWindow().dissolve();
 		this.fireEvent("hide");
 	},
 	initialize: function(opt) {
@@ -605,10 +623,10 @@ var MooContentAssist = new Class({
 	},
 	scrollToItem: function(item) {
 		var w = this.getAssistWindow();
-		if (w!=null && item!=null) {
+		if (w!==null && item!==null) {
 			var animationScroller = w.retrieve("MooContentAssist-AnimationScroller");
-			if (animationScroller == null) {
-				assistWindowScroller = new Fx.Scroll(w,{
+			if (animationScroller === null) {
+				animationScroller = new Fx.Scroll(w,{
 		            duration: this.options.animationDuration,
 		            offset: {"x": 0, "y": w.getStyle('padding-top').toInt()*-1}
 		        });
@@ -629,9 +647,9 @@ var MooContentAssist = new Class({
 				indexToScrollTo = c - (f/2).toInt(); 
 			}
 			//scroll to item at that index
-			if(document.getElement(children[indexToScrollTo])!=null) {
+			if(w.getElement(children[indexToScrollTo])!==null) {
 				try {
-					assistWindowScroller.toElement(children[indexToScrollTo]);
+					animationScroller.toElement(children[indexToScrollTo]);
 				} catch(e) {
 					//sometimes IE fires errors...
 					w.store("MooContentAssist-AnimationScroller",null);
@@ -642,13 +660,13 @@ var MooContentAssist = new Class({
 	selectItemDown: function() {
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
-		if (currentItem!=null) {
+		if (currentItem!==null) {
 			prevItem = currentItem.getNext();
 		}
 		else {
 			prevItem = this.getAssistWindow().getFirst(this._prefixItemsSelector+this.options.css.item);
 		}
-		if (prevItem != null) { 
+		if (prevItem!==null) { 
 			this._setItemSelected(prevItem); 
 		}
 		else { 
@@ -658,13 +676,13 @@ var MooContentAssist = new Class({
 	selectItemUp: function() {
 		var currentItem = this.getItemSelected();
 		var prevItem = null;
-		if (currentItem!=null) {
+		if (currentItem!==null) {
 			prevItem = currentItem.getPrevious();
 		}
 		else {
 			prevItem = this.getAssistWindow().getLast(this._prefixItemsSelector+this.options.css.item);
 		}
-		if (prevItem != null) { 
+		if (prevItem!==null) { 
 			this._setItemSelected(prevItem); 
 		}
 		else { 
@@ -678,10 +696,10 @@ var MooContentAssist = new Class({
 	},
 	setAssistWindowContent: function(vocabulary) {
 		var w = this.getAssistWindow();
-		if (w!=null) {
+		if (w!==null) {
 			vocabulary = Array.from(vocabulary);
 
-			var injectBindElement = this.options.itemsContainerType==null? w : w.getElement("."+this.options.css.itemsContainer);
+			var injectBindElement = this.options.itemsContainerType===null? w : w.getElement("."+this.options.css.itemsContainer);
 			var inject = function(word) {
 				word.inject(this);
 			}.bind(injectBindElement);
@@ -701,7 +719,7 @@ var MooContentAssist = new Class({
 		var childrenLength = children.length > 0 ? children.length : 1;
 		if (childrenLength<size) { size = childrenLength;}
 		var exampleItem = w.getElement(selector);
-		if (exampleItem==null) {
+		if (exampleItem===null) {
 			exampleItem = w.getElement(this._prefixItemsSelector+this.options.css.messageItem);
 		}
 		w.setStyle("height",(exampleItem.getComputedSize({
@@ -709,13 +727,13 @@ var MooContentAssist = new Class({
 		}).totalHeight * size) + "px");
 	},
 	show: function() {
-		if(this.getAssistWindow()!=null) this.getAssistWindow().reveal();
+		if(this.getAssistWindow()!==null) this.getAssistWindow().reveal();
 		this.getAssistWindow().setStyle("opacity",1);
 		this.fireEvent("show");
 	},
 	start: function() {
 		var mca = this.getAssistWindow();
-		if (mca!=null) {
+		if (mca!==null) {
 			this.end();
 			this.createAssistWindow();
 		}
@@ -738,7 +756,7 @@ var MooContentAssist = new Class({
 			vocabulary.each(function(word) {
 				renderedVocabulary.push(this.getRenderedWord(word));
 			}.bind(this));
-			if (mca == null) {
+			if (mca === null) {
 				mca = this.createAssistWindow();
 			}
 			this.setAssistWindowContent(renderedVocabulary);
@@ -746,7 +764,7 @@ var MooContentAssist = new Class({
 		else {
 			if (!this.options.aggressiveAssist || (this.options.aggressiveAssist && namespace.length>1)) {
 				var messageEl = this._createMessage(this.options.labels.nothingFound);
-				if (mca == null) {
+				if (mca === null) {
 					mca = this.createAssistWindow();
 				}
 				this.setAssistWindowContent(messageEl);

@@ -4,24 +4,25 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <title>namepsace parser v2</title>
 <link rel="stylesheet" type="text/css" href="JSSpec-lib/JSSpec.css" />
-<script type="text/javascript" src="JSSpec-lib/diff_match_patch.js"></script>
-<script type="text/javascript" src="JSSpec-lib/JSSpec.js"></script>
-<script type="text/javascript" src="../js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
-<script type="text/javascript" src="../Source/MooContentAssist.js"></script>
-<script type="text/javascript">// <![CDATA[
+<script src="JSSpec-lib/diff_match_patch.js"></script>
+<script src="JSSpec-lib/JSSpec.js"></script>
+<script src="../js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
+<script src="../Source/MooContentAssist.js"></script>
+<script>// <![CDATA[
 
 var MooContentAssist_JSSpec = {
 	namespaceParser2: function(string,caretPosition, allowed) {
-		/***test vars setting /start/***/
+		/*** test vars setting start ***/
 		var namespace = [];
 		if (allowed === undefined) {
 			allowed  = ["()", "$", "#", "{{","}}","((","))","[[","]]"];
 		}
 		var nameSpaceString = string;
-		/***test vars setting /end/***/
+		/*** test vars setting end ***/
 		
 		var positionStart = 0;
-		for (var i=caretPosition-1;i>0;--i) {
+		var i = 0;
+		for (i=caretPosition-1;i>0;--i) {
 			var character = nameSpaceString[i];
 			var previousCharacter = nameSpaceString[i+1];
 			if (character===undefined) {
@@ -274,9 +275,8 @@ describe("String to test: |a b\tc(|", {
 		var ns = MooContentAssist_JSSpec.namespaceParser2("a b\tc(",6);
 		value_of(ns).should_have_exactly(1, "items");
 		expect(ns[0]).should_be("/");
-	},
-	"at position 6 - must return one element": function() {
-		var ns = MooContentAssist_JSSpec.namespaceParser2("a b\tc(.",6);
+		
+		ns = MooContentAssist_JSSpec.namespaceParser2("a b\tc(.",6);
 		value_of(ns).should_have_exactly(1, "items");
 		expect(ns[0]).should_be("/");
 	},
@@ -284,10 +284,8 @@ describe("String to test: |a b\tc(|", {
 		var ns = MooContentAssist_JSSpec.namespaceParser2("a b\tc(.",7);
 		value_of(ns).should_have_exactly(1, "items");
 		expect(ns[0]).should_be("/");
-	},
-	"at position 7 - must return one element": function() {
-		//debugger;
-		var ns = MooContentAssist_JSSpec.namespaceParser2("a b\tc($",7);
+		
+		ns = MooContentAssist_JSSpec.namespaceParser2("a b\tc($",7);
 		value_of(ns).should_have_exactly(1, "items");
 		expect(ns[0]).should_be("$");
 	}
@@ -304,7 +302,7 @@ describe("String to Test: | $test.we.we2|", {
 		expect(ns[0]).should_be("$test");
 		expect(ns[1]).should_be("we");
 		expect(ns[2]).should_be("we");
-	},
+	}
 });
 
 describe("String to Test: |{{1}}.((2)).[[3]]|", {
@@ -383,7 +381,7 @@ describe("String to test: |write here [[squarebrackets]].|", {
 		value_of(ns[1]).should_be("/");
 	},
 	"triple valid chars": function() {
-		var valid = ["---"]
+		var valid = ["---"];
 		var stringToTest = "a.b---b.c";
 		var ns;
 		ns= MooContentAssist_JSSpec.namespaceParser2(stringToTest,9,valid);
@@ -403,7 +401,7 @@ describe("String to test: |write here [[squarebrackets]].|", {
 
 describe("String to Test: |{{ftw}}.|",{
 	"sub single key": function() {
-		var valid = ["{{","}}"]
+		var valid = ["{{","}}"];
 		var stringToTest = "{{ftw}}.";
 		var ns;
 		ns= MooContentAssist_JSSpec.namespaceParser2(stringToTest,8,valid);
@@ -412,8 +410,8 @@ describe("String to Test: |{{ftw}}.|",{
 		value_of(ns[1]).should_be("/");
 	}
 });
-
-// ]]></script>
+//]]>
+</script>
 </head>
 <body><textarea id="t"></textarea></body>
 </html>
