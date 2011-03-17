@@ -128,3 +128,4 @@ Screenshots
 -----------
 
 ![Screenshot 1](http://moocontentassist.altervista.org/img/screenshot.png)
+![Screenshot 2](http://github.com/NKjoep/MooContentAssist/raw/master/img/screenshot-complex-vocabulary.png)
