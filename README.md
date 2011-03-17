@@ -52,8 +52,8 @@ How to use
 
 Parameters / Options Mandatory
 ------------------------------
- * source: null,
- * vocabulary: null,
+ * source - default: null
+ * vocabulary - default: null
 
 Parameters / Options Extra
 ------------------------------
