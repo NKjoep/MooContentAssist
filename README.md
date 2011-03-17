@@ -80,25 +80,25 @@ Parameters / Options Extra
  * vocabularyManager_GetVocabulary - default: function(namespace) {
 
 Eeverything works if you give the right json words object.
+
 Use this as root: 
-    #JS
-    words: {
-       "key1": 
-       "key2": 
-       "key3":
-    
-    }
+
+	vocabulary: {
+		"key1": 
+		"key2": 
+		"key3":
+	}
 
 If the key doesn't have sub-keys you must use an array with strings:
-	#JS
+	
 	"key_without_subkeys": ["word1","word2","word3"]
 
 If the key has sub-keys you must use objects:
-	#JS
+
 	"key_with_subkeys": {
-	  "subkey1": ["word","word","word"],
-	  "subkey2": ["word","word","word"],
-	  "subkey3": ["word","word","word"]
+		"subkey1": ["word","word","word"],
+		"subkey2": ["word","word","word"],
+		"subkey3": ["word","word","word"]
 	}
 
 Obviously you could have infinite sub-levels :)
