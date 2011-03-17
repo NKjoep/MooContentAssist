@@ -14,24 +14,21 @@ Features
 How to use
 ----------
 
-1. You need a textarea with the html id, example:
+1-You need a textarea with the html id, example:
 
-<code>
-<textarea id="myeditor"></textarea>
-</code> 
+	<textarea id="myeditor">
+		Lorem Ipsum
+	</textarea>
 
-2. Then include the MooContentAssist.js and CSS (and MooTools if you already haven't)
+2-Then include the MooContentAssist.js and CSS (and MooTools if you already haven't)
 
-<code>
-<link type="text/css" rel="stylesheet" href="MooContentAssist.css" />
-<script src="js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
-<script src="js/lib/mootools-more-1.3.1.1.js"></script>
-<script src="Source/MooContentAssist.js"></script>
-</code>
+	<link type="text/css" rel="stylesheet" href="MooContentAssist.css" />
+	<script src="js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
+	<script src="js/lib/mootools-more-1.3.1.1.js"></script>
+	<script src="Source/MooContentAssist.js"></script>
 
-3. Istantiate a new MooContentAssist
-	
-	#HTML
+3-Istantiate a new MooContentAssist
+
 	<script type="text/javascript>
 		window.addEvent("domready",function(){
 			var editorAssisted = new MooContentAssist( {
