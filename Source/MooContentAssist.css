@@ -29,7 +29,7 @@
 	color: #EDEDED;
 }
 .MooContentAssist .itemSelected .matched {/*the portion of text matched inside the item selected*/
-	color: #E6E6E6;
+	color: #D9D9D9;
 }
 .MooContentAssist .message {/*message*/
 	list-style-type: none;

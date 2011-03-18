@@ -29,10 +29,10 @@ provides: [MooContentAssist]
 
     Changelog:
 
-14 Mar 2011 v.080.3 - namespace parser, fixed "charAt()" problem with IE7
-08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or strings) in the namespace
-08 Mar 2011 v.080.1 - configurable items container inside the main box
-06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
+14 Mar 2011 v0.80.3 - namespace parser, fixed "charAt()" problem with IE7
+08 Mar 2011 v0.80.2 - namespace parser, now with allowed chars (or strings) in the namespace
+08 Mar 2011 v0.80.1 - configurable items container inside the main box
+06 Mar 2011 v0.80 - MooTools 1.3, several bugfixing, internal API rewritten.
 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
 27 Jun 2010 v0.70 - theme changer, new demo with theme toggler
 11 Jun 2010 v0.70 - configurable number of item shown in the box
@@ -53,10 +53,53 @@ provides: [MooContentAssist]
 		Version - v.080.3
 		Date - 18 Mar 2011
 */
-/* JSHint globals */
-/*globals Events: false, Options: false, MooTools: false, Class: false, Element: false, typeOf: false, instanceOf: false, Fx: false, Slick: false, Type: false, Chain: false, Elements: false, Document: false, Event: false, Window: false, Browser: false , Request: false, Keyboard: false */
+
+/* JSHint globals
+globals Events: false, Options: false, MooTools: false, Class: false, Element: false, typeOf: false, instanceOf: false, Fx: false, Slick: false, Type: false, Chain: false, Elements: false, Document: false, Event: false, Window: false, Browser: false , Request: false, Keyboard: false */
+
+/**
+ * @author Andrea Dessì <nkjoep@gmail.com>
+ * @fileoverview A content assist for textares of your webpage. {@link https://github.com/NKjoep/MooContentAssist}
+ * @version 0.80.3
+ * 
+ * */
+
+/**
+ * Construct a new MooContentAssist object.
+ * @class {MooContentAssist} This is the basic MooContentAssist class.  
+ * @constructor
+ * @param {object} options The object containing the class parameters.
+ @param {element} options.source The html element of an input or textarea.
+ @param {Integer} options.frameSize How many items show in the window at same size.
+ @param {Integer} options.animationDuration How long the show/hide animation in milliseconds
+ @param {Object} options.vocabulary The JSON obj representing the vocabulary
+ @param {Boolean} options.vocabularyDiscoverer Toggle the automatic words discoverer on/off
+ @param {String} options.vocabularyUrl The url for ajax calls. It's optional.
+ @param {String} options.vocabularyUrlParam The name of the querystring variable passed to the options.vocabularyUrl in ajax calls
+ @param {String} options.vocabularyUrlMethod Supported: get, post. Used for ajax calls.
+ @param {Object} options.windowPadding The margin of the assist window. It's an object with x,y keys.
+ @param {String} options.itemType The tag used for generating itemsContainer
+ @param {String} options.itemsContainer The tag used for generating the items container
+ @param {String} options.matchedTextItemType The tag used for the matched text
+ @param {Boolean} options.aggressiveAssist Toggle aggressiveAssist mode on/offset
+ @param {String[]} options.namespaceAllowed Define which strings can be contained in namespaces item.
+ @param {Object} options.css The css for the html elements
+ @param {String} options.css.item The css class for the single item
+ @param {String} options.css.itemsContainer The css for the items container
+ @param {String} options.css.itemSelected The css class added to the item when it's selected
+ @param {String} options.css.messageItem
+ @param {String} options.css.matchedText
+ @param {Object} options.labels
+ @param {String} options.labels.nothingFound Default: "Nothing was found.",
+ @param {String} options.labels.ajaxError Default: "Error while retrieving data."
+ @param {Function} options.vocabularyManager_GetVocabulary
+ @param {Function} options.vocabularyManager_Extract
+ @param {Function} options.vocabularyManager_Render
+ @return {MooContentAssist} A MooContentAssist
+ * 
+ */
 var MooContentAssist = new Class({
-	version: "MooContentAssist v0.80.2",
+	version: "MooContentAssist v0.80.3",
 	Implements: [Events, Options],
 	options: {
 		source: null,
@@ -67,7 +110,7 @@ var MooContentAssist = new Class({
 		vocabularyUrl: null,
 		vocabularyUrlParam: "ns",
 		vocabularyUrlMethod: "get",
-		windowPadding: {x: 0, y: 5},
+		windowPadding: {x: 0, y: 2},
 		itemType: "li",
 		itemsContainerType: "ul",
 		matchedTextItemType: "span",
