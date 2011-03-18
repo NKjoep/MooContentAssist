@@ -1,6 +1,6 @@
 <project name="MooContentAssist Doc Builder" default="build" basedir=".">
 	<description>MooContentAssist JsDoc Builder</description>
-	<target name="build" description="clean up build and dist directories" depends="clean">
+	<target name="build" description="clean up the doc directories and build the new docs" depends="clean">
 		<echo message="[MooContentAssist] compiling - starting JsDoc builder" />
 		<taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpath="./jsdoc-toolkit/jsdoc-toolkit-ant-task-1.1.0.jar;./jsdoc-toolkit/java/classes/js.jar"/>
 		<jsdoctoolkit jsdochome="./jsdoc-toolkit/" template="codeview1.2" outputdir="../doc/" inputdir="../Source/" />
