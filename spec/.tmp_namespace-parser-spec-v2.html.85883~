@@ -9,7 +9,7 @@
 <script src="../js/lib/mootools-core-1.3.1-full-nocompat.js"></script>
 <script src="../Source/MooContentAssist.js"></script>
 <script>// <![CDATA[
-/*globals describe: false, value_of: false, expect: false */
+
 var MooContentAssist_JSSpec = {
 	namespaceParser2: function(string,caretPosition, allowed) {
 		/*** test vars setting start ***/
@@ -23,8 +23,8 @@ var MooContentAssist_JSSpec = {
 		var positionStart = 0;
 		var i = 0;
 		for (i=caretPosition-1;i>0;--i) {
-			var character = nameSpaceString.charAt(i);
-			var previousCharacter = nameSpaceString.charAt(i+1);
+			var character = nameSpaceString[i];
+			var previousCharacter = nameSpaceString[i+1];
 			if (character===undefined) {
 				break;
 			}
@@ -49,7 +49,7 @@ var MooContentAssist_JSSpec = {
 			if (cursorJump>0) {
 				i = i-cursorJump;
 				character=nameSpaceString[i];
-				previousCharacter=nameSpaceString.charAt(i+1);
+				previousCharacter=nameSpaceString[i+1];
 				continue;
 			}
 			if ( character!="." && !(character.test(/^\w$/) || endsWithAllowed ) ) {
@@ -95,7 +95,7 @@ var MooContentAssist_JSSpec = {
 		nameSpaceString = nameSpaceString.substring(positionStart,caretPosition).trim();
 		if (nameSpaceString.length>0) {
 			namespace=nameSpaceString.split(".");
-			if (namespace[namespace.length-1]==="") {
+			if (namespace[namespace.length-1]=="") {
 				namespace[namespace.length-1] = "/";
 			}
 		}
@@ -307,34 +307,34 @@ describe("String to Test: | $test.we.we2|", {
 
 describe("String to Test: |{{1}}.((2)).[[3]]|", {
 	"at posistion 5" : function() {
-		var stringToTest="{{1}}.((2)).[[3]]";
+		var stringToTest= "{{1}}.((2)).[[3]]"; 		
 		var ns = MooContentAssist_JSSpec.namespaceParser2(stringToTest,5);
 		value_of(ns).should_have_exactly(1, "items");
 		expect(ns[0]).should_be("{{1}}");
 	},
 	"at posistion 6" : function() {
-		var stringToTest= "{{1}}.((2)).[[3]]";
+		var stringToTest= "{{1}}.((2)).[[3]]"; 		
 		var ns = MooContentAssist_JSSpec.namespaceParser2(stringToTest,6);
 		value_of(ns).should_have_exactly(2, "items");
 		expect(ns[0]).should_be("{{1}}");
 		expect(ns[1]).should_be("/");
 	},
 	"at posistion 10" : function() {
-		var stringToTest= "{{1}}.((2)).[[3]]";
+		var stringToTest= "{{1}}.((2)).[[3]]"; 		
 		var ns = MooContentAssist_JSSpec.namespaceParser2(stringToTest,10);
 		value_of(ns).should_have_exactly(2, "items");
 		expect(ns[0]).should_be("{{1}}");
 		expect(ns[1]).should_be("((2)");
 	},
 	"at posistion 11" : function() {
-		var stringToTest= "{{1}}.((2)).[[3]]";
+		var stringToTest= "{{1}}.((2)).[[3]]"; 		
 		var ns = MooContentAssist_JSSpec.namespaceParser2(stringToTest,11);
 		value_of(ns).should_have_exactly(2, "items");
 		expect(ns[0]).should_be("{{1}}");
 		expect(ns[1]).should_be("((2))");
 	},
 	"at posistion 17" : function() {
-		var stringToTest= "{{1}}.((2)).[[3]]";
+		var stringToTest= "{{1}}.((2)).[[3]]"; 		
 		var ns = MooContentAssist_JSSpec.namespaceParser2(stringToTest,17);
 		value_of(ns).should_have_exactly(3, "items");
 		expect(ns[0]).should_be("{{1}}");

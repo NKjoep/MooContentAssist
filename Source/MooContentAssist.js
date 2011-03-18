@@ -395,9 +395,10 @@ var MooContentAssist = new Class({
 		
 		/* parser start */
 		var positionStart = 0;
-		for (var i=caretPosition-1;i>0;--i) {
-			var character = nameSpaceString[i];
-			var previousCharacter = nameSpaceString[i+1];
+		var i = 0;
+		for (i=caretPosition-1;i>0;--i) {
+			var character = nameSpaceString.charAt(i);
+			var previousCharacter = nameSpaceString.charAt(i+1);
 			if (character===undefined) {
 				break;
 			}
@@ -422,7 +423,7 @@ var MooContentAssist = new Class({
 			if (cursorJump>0) {
 				i = i-cursorJump;
 				character=nameSpaceString[i];
-				previousCharacter=nameSpaceString[i+1];
+				previousCharacter=nameSpaceString.charAt(i+1);
 				continue;
 			}
 			if ( character!="." && !(character.test(/^\w$/) || endsWithAllowed ) ) {
@@ -443,19 +444,21 @@ var MooContentAssist = new Class({
 							}
 						} 
 						//forward seek
-						else if (nameSpaceString.substring(i,i+item.length) == item ) {
-							jumpPrevious=item.length;
-							return true;
-						}
+							else if (nameSpaceString.substring(i,i+item.length) == item ) {
+								jumpPrevious=item.length;
+								return true;
+							}
 						//back seek
-						else if (nameSpaceString.substring(i-item.length+1,i+1) == item) {
-							jumpPrevious= (-(item.length));
-							return true;
-						}
+							else if (nameSpaceString.substring(i-item.length+1,i+1) == item) {
+								jumpPrevious= (-(item.length));
+								return true;
+							}
 					});
+					
 					if (!previousCharacterEndsWithAllowed && !previousCharacter.test(/^\w$/)) { 
+						//here only allowed
 						positionStart = i+1+jumpPrevious;
-					}
+					} 
 				}
 				break;
 			}
