@@ -107,6 +107,7 @@ Please see index.html in the git repo if you need a working example. :)
 
 ChangeLog
 -----------
+* 14 Mar 2011 v.080.3 - namespace parser, fixed "charAt()" problem with IE7
 * 08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or strings) in the namespace
 * 08 Mar 2011 v.080.1 - configurable items container inside the main box
 * 06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.* 01 Jul 2010 v0.70.4 - converter from xml to words object, fixed bug on foundlist, fixed bug on assist window position
