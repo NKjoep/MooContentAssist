@@ -1,4 +1,3 @@
-/*globals Events: false, Options: false, MooTools: false, Class: false, Element: false, typeOf: false, instanceOf: false, Fx: false, Slick: false, Type: false, Chain: false, Elements: false, Document: false, Event: false, Window: false, Browser: false , Request: false, Keyboard: false */
 /*
 ---
 
@@ -29,7 +28,8 @@ provides: [MooContentAssist]
     It adds a content/code assist functionality to your textareas.
 
     Changelog:
-    
+
+14 Mar 2011 v.080.3 - namespace parser, fixed "charAt()" problem with IE7
 08 Mar 2011 v.080.2 - namespace parser, now with allowed chars (or strings) in the namespace
 08 Mar 2011 v.080.1 - configurable items container inside the main box
 06 Mar 2011 v.080 - MooTools 1.3, several bugfixing, internal API rewritten.
@@ -50,9 +50,11 @@ provides: [MooContentAssist]
     
     Info:
 	
-		Version - v.080.2
-		Date - 14 Mar 2011
+		Version - v.080.3
+		Date - 18 Mar 2011
 */
+/* JSHint globals */
+/*globals Events: false, Options: false, MooTools: false, Class: false, Element: false, typeOf: false, instanceOf: false, Fx: false, Slick: false, Type: false, Chain: false, Elements: false, Document: false, Event: false, Window: false, Browser: false , Request: false, Keyboard: false */
 var MooContentAssist = new Class({
 	version: "MooContentAssist v0.80.2",
 	Implements: [Events, Options],
