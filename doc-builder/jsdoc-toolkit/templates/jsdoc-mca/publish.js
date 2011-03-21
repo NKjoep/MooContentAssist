@@ -47,8 +47,11 @@ function publish(symbolSet) {
 		makeSrcFile(file, srcDir);
  	}
  	
+ 	function notGlobalNS($) {return ($.alias != '_global_')}
+ 	
  	// get a list of all the classes in the symbolset
- 	var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
+ 	//var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
+ 	var classes = symbols.filter(isaClass).filter(notGlobalNS).sort(makeSortby("alias"));
 	
 	// create a filemap in which outfiles must be to be named uniquely, ignoring case
 	if (JSDOC.opt.u) {
