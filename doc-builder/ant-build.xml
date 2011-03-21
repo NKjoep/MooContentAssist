@@ -10,7 +10,6 @@
 			inputdir="../Source/" />
 		<echo message="[MooContentAssist] compiling - end." />
 	</target>
-	
 	<target name="clean" description="clean up the docs directory">
 		<echo message="[MooContentAssist] cleaning - starting cleaning up doc folder" />
 		<delete includeemptydirs="true">
@@ -18,5 +17,4 @@
 		</delete>
 		<echo message="[MooContentAssist] cleaning - done." />
 	</target>
-	
 </project>
