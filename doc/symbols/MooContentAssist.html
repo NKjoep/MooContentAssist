@@ -1,349 +1,472 @@
-
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-		<meta charset="UTF-8"></meta>
-		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>MooContentAssist | JsDoc Reference</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>JsDoc Reference - MooContentAssist</title>
 
-		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
-		<meta name="mobileoptimized" content="0"></meta>
-	
-		<link rel="stylesheet" href="../css/all.css" media="all"></link>
-		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
-		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
-		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+		<style type="text/css">
+			/* default.css */
+body {
+	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	width: 800px;
+}
 
-		<script src="../javascript/all.js"></script>
-		<!--[if lt IE 9]>
-			<script src="../javascript/html5.js"></script>
-		<![endif]-->
+.header {
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+}
+
+h1 {
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em 0 0 .3em;
+}
+
+hr {
+	border: none 0;
+	border-top: 1px solid #7F8FB1;
+	height: 1px;
+}
+
+pre.code {
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+}
+
+#index {
+	margin-top: 24px;
+	float: left;
+	width: 160px;
+	position: absolute;
+	left: 8px;
+	background-color: #F3F3F3;
+	padding: 8px;
+}
+
+#content {
+	margin-left: 190px;
+	width: 600px;
+}
+
+.classList {
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li {
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable {
+	width: 100%;
+}
+
+h1.classTitle {
+	font-size: 170%;
+	line-height: 130%;
+}
+
+h2 {
+	font-size: 110%;
+}
+
+caption,div.sectionTitle {
+	background-color: #7F8FB1;
+	color: #fff;
+	font-size: 130%;
+	text-align: left;
+	padding: 2px 6px 2px 6px;
+	border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle {
+	margin-bottom: 8px;
+}
+
+.summaryTable thead {
+	display: none;
+}
+
+.summaryTable td {
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes {
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes,.fixedFont {
+	line-height: 15px;
+	color: #002EBE;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription {
+	text-align: left;
+	font-size: 13px;
+	line-height: 15px;
+}
+
+.summaryTable td.nameDescription,.description {
+	line-height: 15px;
+	padding: 4px;
+	padding-left: 4px;
+}
+
+.summaryTable {
+	margin-bottom: 8px;
+}
+
+ul.inheritsList {
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList {
+	margin-left: 20px;
+	/*line-height: 15px;*/
+	line-height: 2em;
+}
+
+.detailList dt {
+	margin-left: 20px;
+	margin-top: 14px;
+}
+
+.detailList .heading {
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+}
+
+.light,td.attributes,.light a:link,.light a:visited {
+	color: #777;
+	font-style: italic;
+}
+
+.fineprint {
+	text-align: right;
+	font-size: 10px;
+}
+		</style>
 	</head>
 
 	<body>
-
-<div class="index">
-	<div class="menu">
-		<div class="indexLinks">
-			<a href="../index.html">Classes</a>
-			<a href="../files.html">Files</a>
-		</div>
-	
-		<h2 class="heading1">Classes</h2>
-		
-		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
-		
-		<nav>
-			<ul class="classList" id="ClassList">
-				
-					<li><a href="../symbols/_global_.html">_global_</a></li>
-				
-					<li><a href="../symbols/MooContentAssist.html">MooContentAssist</a></li>
-				
-			</ul>
-		</nav>
-	</div>
-	<div class="fineprint" style="clear:both">
-		
-		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
-		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-2-19 0:38
-	</div>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div id="header">
 </div>
+		<!-- end static/header.html -->
 
-<div class="index indexStatic"></div>
-
-<div class="content">
-	<div class="innerContent">
-		<h1 class="classTitle">
-			
-			Class <span>MooContentAssist</span>
-		</h1>
-		
-		<div class="intro">
-			<p class="description summary">
-				This is the basic MooContentAssist class.
-			</p>
-				
-			
-				<ul class="summary">
-					
-					
-					
-						<li>Defined in: <a href="../symbols/src/Source_MooContentAssist.js.html">MooContentAssist.js</a></li>
-					
-						
-				</ul>
-			
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+			<!-- begin publish.classesIndex -->
+			<div align="center"><a href="../index.html">Class Index</a>
+| <a href="../files.html">File Index</a></div>
+<hr />
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
+	
+	<li><a href="../symbols/MooContentAssist.html">MooContentAssist</a></li>
+	
+</ul>
+<hr />
+			<!-- end publish.classesIndex -->
 		</div>
 		
-		
-			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class MooContentAssist.">
-					<caption class="sectionTitle">Class Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Constructor Attributes</th>
-							<th scope="col">Constructor Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription" >
-								<div class="fixedFont">
-									<b><a href="../symbols/MooContentAssist.html#constructor">MooContentAssist</a></b>(options)
-								</div>
-								<div class="description">Construct a new MooContentAssist object.</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		
-		
-		
-<!--
-#### METHODS SUMMARY
--->
-		
-		
-<!--
-#### EVENTS SUMMARY
--->
-		
-<!--
-#### CONSTRUCTOR DETAILS
--->
-		
-			<div class="details props">
-				<div class="innerProps">
-					<h2 class="sectionTitle" id="constructor">
-						Class Detail
-					</h2>
-					
-					<div class="fixedFont">
-						<b>MooContentAssist</b>(options)
-					</div>
-					
-					<div class="description">
-						Construct a new MooContentAssist object.
-						
-					</div>
-					
-					
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
 				
-					
-						<dl class="detailList params">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{object}</span>  <b>options</b>
-									
-								</dt>
-								<dd>The object containing the class parameters.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{element}</span>  <b>options.source</b>
-									
-								</dt>
-								<dd>The html element of an input or textarea.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span>  <b>options.frameSize</b>
-									
-								</dt>
-								<dd>How many items show in the window at same size.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span>  <b>options.animationDuration</b>
-									
-								</dt>
-								<dd>How long the show/hide animation in milliseconds</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span>  <b>options.vocabulary</b>
-									
-								</dt>
-								<dd>The JSON obj representing the vocabulary</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Boolean}</span>  <b>options.vocabularyDiscoverer</b>
-									
-								</dt>
-								<dd>Toggle the automatic words discoverer on/off</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.vocabularyUrl</b>
-									
-								</dt>
-								<dd>The url for ajax calls. It's optional.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.vocabularyUrlParam</b>
-									
-								</dt>
-								<dd>The name of the querystring variable passed to the options.vocabularyUrl in ajax calls</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.vocabularyUrlMethod</b>
-									
-								</dt>
-								<dd>Supported: get, post. Used for ajax calls.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span>  <b>options.windowPadding</b>
-									
-								</dt>
-								<dd>The margin of the assist window. It's an object with x,y keys.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.itemType</b>
-									
-								</dt>
-								<dd>The tag used for generating itemsContainer</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.itemsContainer</b>
-									
-								</dt>
-								<dd>The tag used for generating the items container</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.matchedTextItemType</b>
-									
-								</dt>
-								<dd>The tag used for the matched text</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Boolean}</span>  <b>options.aggressiveAssist</b>
-									
-								</dt>
-								<dd>Toggle aggressiveAssist mode on/offset</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String[]}</span>  <b>options.namespaceAllowed</b>
-									
-								</dt>
-								<dd>Define which strings can be contained in namespaces item.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span>  <b>options.css</b>
-									
-								</dt>
-								<dd>The css for the html elements</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.css.item</b>
-									
-								</dt>
-								<dd>The css class for the single item</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.css.itemsContainer</b>
-									
-								</dt>
-								<dd>The css for the items container</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.css.itemSelected</b>
-									
-								</dt>
-								<dd>The css class added to the item when it's selected</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.css.messageItem</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.css.matchedText</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span>  <b>options.labels</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.labels.nothingFound</b>
-									
-								</dt>
-								<dd>Default: "Nothing was found.",</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>options.labels.ajaxError</b>
-									
-								</dt>
-								<dd>Default: "Error while retrieving data."</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span>  <b>options.vocabularyManager_GetVocabulary</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span>  <b>options.vocabularyManager_Extract</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span>  <b>options.vocabularyManager_Render</b>
-									
-								</dt>
-								<dd></dd>
-							
-						</dl>
-					
-					
-					
-						<dl class="detailList nomargin">
-							
-							
-							
-							
-							
-							
-							
-								<dt class="heading">Returns:</dt>
-								
-										<dd><span class="light fixedFont">{<a href="../symbols/MooContentAssist.html">MooContentAssist</a>}</span> A MooContentAssist</dd>
-								
-							
-							
-							
-							
-							
-						</dl>
+				Class MooContentAssist
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+			<p class="description">
+				
+				
+			
+				This is the basic MooContentAssist class. It adds a content/code assist functionality to your textareas.
+				
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/Source_MooContentAssist.js.html">MooContentAssist.js</a>.
+				
+			</p>
+
+<!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class MooContentAssist.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/MooContentAssist.html#constructor">MooContentAssist</a></b>(options)
+							</div>
+							<div class="description">Construct a new MooContentAssist object.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
+<!-- ============================== properties summary ===================== -->
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+<!-- ============================== events summary ======================== -->
+			
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>MooContentAssist</b>(options)
+				</div>
+				
+				<div class="description">
+					Construct a new MooContentAssist object.
 					
 				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Object}</span>  <b>options</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{HtmlElement}</span>  <b>options.source</b>
+								
+							</dt>
+								<dd>The html element of an input or textarea.</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Integer}</span>  <b>options.frameSize</b>
+								<i>Optional, Default: 3</i>
+							</dt>
+								<dd>How many items show in the window at same size.</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Integer}</span>  <b>options.animationDuration</b>
+								<i>Optional, Default: 75</i>
+							</dt>
+								<dd>How long the show/hide animation in milliseconds</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Object}</span>  <b>options.vocabulary</b>
+								
+							</dt>
+								<dd>The JSON obj representing the vocabulary</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Boolean}</span>  <b>options.vocabularyDiscoverer</b>
+								<i>Optional, Default: true</i>
+							</dt>
+								<dd>Toggle the automatic words discoverer on/off</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.vocabularyUrl</b>
+								<i>Optional</i>
+							</dt>
+								<dd>The url for ajax calls. It's optional.</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.vocabularyUrlParam</b>
+								<i>Optional, Default: "ns"</i>
+							</dt>
+								<dd>The name of the querystring variable passed to the options.vocabularyUrl in ajax calls</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.vocabularyUrlMethod</b>
+								<i>Optional, Default: "get"</i>
+							</dt>
+								<dd>Supported: get, post. Used for ajax calls.</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Object}</span>  <b>options.windowPadding</b>
+								<i>Optional, Default: {x: 0, y: 2}</i>
+							</dt>
+								<dd>The margin of the assist window. It's an object with x,y keys.</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.itemType</b>
+								<i>Optional, Default: "li"</i>
+							</dt>
+								<dd>The tag used for generating itemsContainer</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.itemsContainer</b>
+								<i>Optional, Default: "ul"</i>
+							</dt>
+								<dd>The tag used for generating the items container</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.matchedTextItemType</b>
+								<i>Optional, Default: "span"</i>
+							</dt>
+								<dd>The tag used for the matched text</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Boolean}</span>  <b>options.aggressiveAssist</b>
+								<i>Optional, Default: "true"</i>
+							</dt>
+								<dd>Toggle aggressiveAssist mode on/offset</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String[]}</span>  <b>options.namespaceAllowed</b>
+								<i>Optional, Default: ["()", "$"]</i>
+							</dt>
+								<dd>Define which strings can be contained in namespaces item.</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Object}</span>  <b>options.css</b>
+								<i>Optional</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.css.item</b>
+								<i>Optional, Default: "item"</i>
+							</dt>
+								<dd>The css class for the single item</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.css.itemsContainer</b>
+								<i>Optional, Default: "itemsContainer"</i>
+							</dt>
+								<dd>The css for the items container</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.css.itemSelected</b>
+								<i>Optional, Default: "itemSelected"</i>
+							</dt>
+								<dd>The css class added to the item when it's selected</dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.css.messageItem</b>
+								<i>Optional, Default: "message"</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.css.matchedText</b>
+								<i>Optional, Default: "matched"</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{Object}</span>  <b>options.labels</b>
+								<i>Optional</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.labels.nothingFound</b>
+								<i>Optional, Default: "Nothing was found."</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>options.labels.ajaxError</b>
+								<i>Optional, Default: "Error while retrieving data."</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{Function}</span>  <b>options.vocabularyManager_GetVocabulary</b>
+								<i>Optional</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{Function}</span>  <b>options.vocabularyManager_Extract</b>
+								<i>Optional</i>
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{Function}</span>  <b>options.vocabularyManager_Render</b>
+								<i>Optional</i>
+							</dt>
+								<dd></dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Returns:</dt>
+						
+								<dd><span class="light fixedFont">{<a href="../symbols/MooContentAssist.html">MooContentAssist</a>}</span> A MooContentAssist</dd>
+						
+						</dl>
+					
+					
+					
+
 			</div>
+			
+
+<!-- ============================== field details ========================== -->		
+			
+
+<!-- ============================== method details ========================= -->		
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+			
+			<hr />
+		</div>
+
 		
-<!--
-#### FIELD DETAILS
--->
-		
-<!--
-#### METHOD DETAILS
--->		
-		
-		
-<!--
-#### EVENT DETAILS
--->		
-		
-	</div>
-</div>
-		<script type="text/javascript">
-			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
-			codeview.classFilter.Init()
-		</script>
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both">
+			
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Mon Mar 21 2011 14:40:26 GMT+0100 (CET)
+		</div>
 	</body>
 </html>
-

@@ -3,7 +3,11 @@
 	<target name="build" description="clean up the doc directories and build the new docs" depends="clean">
 		<echo message="[MooContentAssist] compiling - starting JsDoc builder" />
 		<taskdef name="jsdoctoolkit" classname="uk.co.darrenhurley.ant.tasks.JsDocToolkit" classpath="./jsdoc-toolkit/jsdoc-toolkit-ant-task-1.1.0.jar;./jsdoc-toolkit/java/classes/js.jar"/>
-		<jsdoctoolkit jsdochome="./jsdoc-toolkit/" template="codeview1.2" outputdir="../doc/" inputdir="../Source/" />
+		<jsdoctoolkit 
+			jsdochome="./jsdoc-toolkit/" 
+			template="jsdoc-mca" 
+			outputdir="../doc/" 
+			inputdir="../Source/" />
 		<echo message="[MooContentAssist] compiling - end." />
 	</target>
 	

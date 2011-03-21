@@ -19,16 +19,7 @@ provides: [MooContentAssist]
 ...
 */
 /*
-    Title: MooContentAssist Doc Reference
-*/
-
-/*
-    Class: MooContentAssist
-    
-    It adds a content/code assist functionality to your textareas.
-
-    Changelog:
-
+Changelog:
 14 Mar 2011 v0.80.3 - namespace parser, fixed "charAt()" problem with IE7
 08 Mar 2011 v0.80.2 - namespace parser, now with allowed chars (or strings) in the namespace
 08 Mar 2011 v0.80.1 - configurable items container inside the main box
@@ -47,13 +38,7 @@ provides: [MooContentAssist]
 16 May 2010 v0.25 - fixed words data structure
 15 May 2010 v0.15 - added completed text, events and keys
 13 May 2010 v0.0  - hello word	
-    
-    Info:
-	
-		Version - v.080.3
-		Date - 18 Mar 2011
 */
-
 /* JSHint globals
 globals Events: false, Options: false, MooTools: false, Class: false, Element: false, typeOf: false, instanceOf: false, Fx: false, Slick: false, Type: false, Chain: false, Elements: false, Document: false, Event: false, Window: false, Browser: false , Request: false, Keyboard: false */
 
@@ -63,41 +48,40 @@ globals Events: false, Options: false, MooTools: false, Class: false, Element: f
  * @version 0.80.3
  * 
  * */
-
 /**
- * Construct a new MooContentAssist object.
- * @class {MooContentAssist} This is the basic MooContentAssist class.  
- * @constructor
- * @param {object} options The object containing the class parameters.
- @param {element} options.source The html element of an input or textarea.
- @param {Integer} options.frameSize How many items show in the window at same size.
- @param {Integer} options.animationDuration How long the show/hide animation in milliseconds
- @param {Object} options.vocabulary The JSON obj representing the vocabulary
- @param {Boolean} options.vocabularyDiscoverer Toggle the automatic words discoverer on/off
- @param {String} options.vocabularyUrl The url for ajax calls. It's optional.
- @param {String} options.vocabularyUrlParam The name of the querystring variable passed to the options.vocabularyUrl in ajax calls
- @param {String} options.vocabularyUrlMethod Supported: get, post. Used for ajax calls.
- @param {Object} options.windowPadding The margin of the assist window. It's an object with x,y keys.
- @param {String} options.itemType The tag used for generating itemsContainer
- @param {String} options.itemsContainer The tag used for generating the items container
- @param {String} options.matchedTextItemType The tag used for the matched text
- @param {Boolean} options.aggressiveAssist Toggle aggressiveAssist mode on/offset
- @param {String[]} options.namespaceAllowed Define which strings can be contained in namespaces item.
- @param {Object} options.css The css for the html elements
- @param {String} options.css.item The css class for the single item
- @param {String} options.css.itemsContainer The css for the items container
- @param {String} options.css.itemSelected The css class added to the item when it's selected
- @param {String} options.css.messageItem
- @param {String} options.css.matchedText
- @param {Object} options.labels
- @param {String} options.labels.nothingFound Default: "Nothing was found.",
- @param {String} options.labels.ajaxError Default: "Error while retrieving data."
- @param {Function} options.vocabularyManager_GetVocabulary
- @param {Function} options.vocabularyManager_Extract
- @param {Function} options.vocabularyManager_Render
- @return {MooContentAssist} A MooContentAssist
- * 
- */
+Construct a new MooContentAssist object.
+@class {MooContentAssist} This is the basic MooContentAssist class. It adds a content/code assist functionality to your textareas.
+@constructor
+@param {Object} options
+@param {HtmlElement} options.source The html element of an input or textarea.
+@param {Integer} [options.frameSize=3] How many items show in the window at same size.
+@param {Integer} [options.animationDuration=75] How long the show/hide animation in milliseconds
+@param {Object} options.vocabulary The JSON obj representing the vocabulary
+@param {Boolean} [options.vocabularyDiscoverer=true] Toggle the automatic words discoverer on/off
+@param {String} [options.vocabularyUrl] The url for ajax calls. It's optional.
+@param {String} [options.vocabularyUrlParam="ns"] The name of the querystring variable passed to the options.vocabularyUrl in ajax calls
+@param {String} [options.vocabularyUrlMethod="get"] Supported: get, post. Used for ajax calls.
+@param {Object} [options.windowPadding={x: 0, y: 2}] The margin of the assist window. It's an object with x,y keys.
+@param {String} [options.itemType="li"] The tag used for generating itemsContainer
+@param {String} [options.itemsContainer="ul"] The tag used for generating the items container
+@param {String} [options.matchedTextItemType="span"] The tag used for the matched text
+@param {Boolean} [options.aggressiveAssist="true"] Toggle aggressiveAssist mode on/offset
+@param {String[]} [options.namespaceAllowed=["()", "$"]] Define which strings can be contained in namespaces item.
+@param {Object} [options.css]
+@param {String} [options.css.item="item"] The css class for the single item
+@param {String} [options.css.itemsContainer="itemsContainer"] The css for the items container
+@param {String} [options.css.itemSelected="itemSelected"] The css class added to the item when it's selected
+@param {String} [options.css.messageItem="message"]
+@param {String} [options.css.matchedText="matched"]
+@param {Object} [options.labels]
+@param {String} [options.labels.nothingFound="Nothing was found."]
+@param {String} [options.labels.ajaxError="Error while retrieving data."]
+@param {Function} [options.vocabularyManager_GetVocabulary]
+@param {Function} [options.vocabularyManager_Extract]
+@param {Function} [options.vocabularyManager_Render]
+@return {MooContentAssist} A MooContentAssist
+* 
+*/
 var MooContentAssist = new Class({
 	version: "MooContentAssist v0.80.3",
 	Implements: [Events, Options],
