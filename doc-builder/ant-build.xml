@@ -6,7 +6,7 @@
 		<jsdoctoolkit 
 			jsdochome="./jsdoc-toolkit/" 
 			template="jsdoc-mca" 
-			outputdir="../doc/" 
+			outputdir="../docs/" 
 			inputdir="../Source/"
 			verbose="true"
 			encoding="utf-8"
@@ -16,7 +16,7 @@
 	<target name="clean" description="clean up the docs directory">
 		<echo message="[MooContentAssist] cleaning - starting cleaning up doc folder" />
 		<delete includeemptydirs="true">
-			<fileset dir="../doc/" includes="**/*" />
+			<fileset dir="../docs/" includes="**/*" />
 		</delete>
 		<echo message="[MooContentAssist] cleaning - done." />
 	</target>
