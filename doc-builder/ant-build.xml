@@ -7,7 +7,10 @@
 			jsdochome="./jsdoc-toolkit/" 
 			template="jsdoc-mca" 
 			outputdir="../doc/" 
-			inputdir="../Source/" />
+			inputdir="../Source/"
+			verbose="true"
+			encoding="utf-8"
+			/>
 		<echo message="[MooContentAssist] compiling - end." />
 	</target>
 	<target name="clean" description="clean up the docs directory">
