@@ -421,7 +421,6 @@ var MooContentAssist = new Class({
 		}
 		var namespace = [];
 		var allowed  = this.options.namespaceAllowed;
-		
 		/* parser start */
 		var positionStart = 0;
 		var i = 0;
@@ -483,7 +482,6 @@ var MooContentAssist = new Class({
 								return true;
 							}
 					});
-					
 					if (!previousCharacterEndsWithAllowed && !previousCharacter.test(/^\w$/)) { 
 						//here only allowed
 						positionStart = i+1+jumpPrevious;
@@ -505,8 +503,8 @@ var MooContentAssist = new Class({
 		else {
 			namespace=["/"];
 		}
-		return namespace;	
 		/* parser end */
+		return namespace;	
 	},
 	_setItemSelected: function(item, executeScroll) {
 		if (item!==null) {
@@ -553,7 +551,6 @@ var MooContentAssist = new Class({
 		var w = new Element("div",{
 			"class": "MooContentAssist"
 		});
-		
 		this.options.source.store("MooContentAssist",w);
 		var itemsEventsObj = {};
 			itemsEventsObj['click:relay(.'+this.options.css.item+')'] = function(ev){ 
@@ -588,7 +585,6 @@ var MooContentAssist = new Class({
 			"left": left,
 			"top": top
 		});
-		
 		if (this.options.itemsContainerType!==null) {
 			new Element(this.options.itemsContainerType, {
 				"class": this.options.css.itemsContainer
@@ -633,8 +629,21 @@ var MooContentAssist = new Class({
 		return this.options.source.get("value"); 
 	},
 	getVocabulary: function(namespace) {
-		var extractedVocabulary = this.options.vocabularyManager_GetVocabulary.call(this,namespace);
-		return extractedVocabulary;
+		var vocabulary =  null;
+		var namespaceToString = namespace.toString();
+		if (namespaceToString == this.oldNamespace) {
+			vocabulary = this.oldVocabulary;
+		}
+		else {
+			var vocabulary = this.options.vocabularyManager_GetVocabulary.call(this,namespace);
+			this.oldVocabulary = vocabulary;
+			this.oldNamespace = namespaceToString;
+		}
+		if (this.options.vocabularyDiscoverer) {
+			var userVocabulary = this._discoverUserVocabulary(namespace);
+			vocabulary = this._mergeVocabulary(vocabulary,userVocabulary);
+		}
+		return vocabulary;
 	},
 	hide: function() {
 		if(this.getAssistWindow()!==null) this.getAssistWindow().dissolve();
@@ -660,9 +669,9 @@ var MooContentAssist = new Class({
 			if (animationScroller === null) {
 				animationScroller = new Fx.Scroll(w,{
 		            duration: this.options.animationDuration,
-		            offset: {"x": 0, "y": w.getStyle('padding-top').toInt()*-1}
-		        });
-		        w.store("MooContentAssist-AnimationScroller",animationScroller);
+					offset: {"x": 0, "y": w.getStyle('padding-top').toInt()*-1}
+				});
+				w.store("MooContentAssist-AnimationScroller",animationScroller);
 			}
 			//item height
 		    var i = item.getComputedSize({"styles": ["margin","padding","border"]}).totalHeight;
@@ -730,7 +739,6 @@ var MooContentAssist = new Class({
 		var w = this.getAssistWindow();
 		if (w!==null) {
 			vocabulary = Array.from(vocabulary);
-
 			var injectBindElement = this.options.itemsContainerType===null? w : w.getElement("."+this.options.css.itemsContainer);
 			var inject = function(word) {
 				word.inject(this);
@@ -771,18 +779,7 @@ var MooContentAssist = new Class({
 		}
 		var value = this.getSourceValue();
 		var namespace = this.getNameSpace(value);
-		var vocabulary = null;
-		if (namespace == this.oldNamespace) {
-			vocabulary = this.oldVocabulary;
-		}
-		else {
-			vocabulary = this.getVocabulary(namespace);
-			this.oldVocabulary = vocabulary;
-		}
-		if (this.options.vocabularyDiscoverer) {
-			var userVocabulary = this._discoverUserVocabulary(namespace);
-			vocabulary = this._mergeVocabulary(vocabulary,userVocabulary);
-		}
+		var vocabulary = this.getVocabulary(namespace);
 		if (vocabulary.length > 0) {
 			var renderedVocabulary = [];
 			vocabulary.each(function(word) {
